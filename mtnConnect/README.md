@@ -1,4 +1,9 @@
-# MtnConnect
+# MeetTheNeedConnects
+
+MeetTheNeedConnects is a Career Development Portal currently in developement.
+This initial version focuses on:
+  Event Listing
+  RSVP/Registration Flow
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.3.
 

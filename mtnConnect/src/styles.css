@@ -1,1 +1,57 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --primary-purple: #7d3fb0;
+  --sun-yellow: #ffcc33;
+  --sun-orange: #ff9933;
+  --grass-green: #2cb34a;
+  --text-dark: #333;
+}
+
+/* Default body styling */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 0;
+  color: var(--text-dark);
+}
+
+
+.app-header {
+  background: linear-gradient(to right, var(--sun-orange), var(--sun-yellow));
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Logo styling */
+.app-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+/* Page Title Style */
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-purple);
+  margin-bottom: 15px;
+}
+
+
+.btn-primary {
+  background: var(--grass-green);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background: var(--primary-purple);
+}
