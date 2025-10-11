@@ -2,19 +2,36 @@
   --primary-purple: #7d3fb0;
   --sun-yellow: #ffcc33;
   --sun-orange: #ff9933;
-  --grass-green: #2cb34a;
+  --sky-blue: #0056b3;
   --text-dark: #333;
 }
 
 /* Default body styling */
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   background: #f7f7f7;
   margin: 0;
   padding: 0;
   color: var(--text-dark);
 }
 
+input, button {
+  display: block;
+  width: 40%;
+  margin: 8px 0;
+  padding: 8px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
 
 .app-header {
   background: linear-gradient(to right, var(--sun-orange), var(--sun-yellow));
@@ -42,7 +59,7 @@ body {
 
 
 .btn-primary {
-  background: var(--grass-green);
+  background: var(--sky-blue);
   color: white;
   border: none;
   padding: 10px 16px;
@@ -54,4 +71,22 @@ body {
 
 .btn-primary:hover {
   background: var(--primary-purple);
+}
+.footer {
+  text-align: center;
+  padding: 15px 10px;
+  background-color: #f1f1f1;  /* light gray */
+  color: #555;
+  font-size: 0.9rem;
+  margin-top: 50px;
+  border-top: 1px solid #ddd;
+}
+body, html {
+  height: 100%;
+}
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }

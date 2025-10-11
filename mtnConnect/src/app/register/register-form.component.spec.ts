@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegistrationFormComponent } from './registration-form.component';
+import { RegistrationFormComponent } from './register-form.component';
 
 describe('RegistrationFormComponent', () => {
   let component: RegistrationFormComponent;

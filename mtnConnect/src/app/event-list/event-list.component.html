@@ -1,0 +1,17 @@
+<button class= "btn-primary" routerLink="/home">Back to Dashboard</button>
+<div class="container">
+  <h2>Upcoming Events</h2>
+<ul>
+  @for (event of events; track event.id) {
+    <li>
+      <strong>{{ event.name }}</strong> - {{ event.date | date: 'fullDate' }}
+    </li>
+    <button class= "btn-primary" routerLink="/register">Register Now!</button>
+  } @empty {
+    <li>No upcoming events.</li>
+  }
+</ul>
+</div>
+
+
+
