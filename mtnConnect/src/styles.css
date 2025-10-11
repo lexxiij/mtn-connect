@@ -1,9 +1,9 @@
 :root {
-  --primary-purple: #7d3fb0;
-  --sun-yellow: #ffcc33;
-  --sun-orange: #ff9933;
-  --sky-blue: #0056b3;
-  --text-dark: #333;
+  --purple: #7d3fb0;
+  --yellow: #ffcc33;
+  --orange: #ff9933;
+  --blue: #0056b3;
+  --dark: #333;
 }
 
 /* Default body styling */
@@ -12,7 +12,7 @@ body {
   background: #f7f7f7;
   margin: 0;
   padding: 0;
-  color: var(--text-dark);
+  color: var(--dark);
 }
 
 input, button {
@@ -30,11 +30,11 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: var(--blue);
 }
 
 .app-header {
-  background: linear-gradient(to right, var(--sun-orange), var(--sun-yellow));
+  background: linear-gradient(to right, var(--sun-orange), var(--yellow));
   padding: 12px 20px;
   display: flex;
   align-items: center;
@@ -53,13 +53,13 @@ button:hover {
 .page-title {
   font-size: 24px;
   font-weight: bold;
-  color: var(--primary-purple);
+  color: var(--purple);
   margin-bottom: 15px;
 }
 
 
 .btn-primary {
-  background: var(--sky-blue);
+  background: var(--blue);
   color: white;
   border: none;
   padding: 10px 16px;
@@ -70,7 +70,7 @@ button:hover {
 }
 
 .btn-primary:hover {
-  background: var(--primary-purple);
+  background: var(--purple);
 }
 .footer {
   text-align: center;
