@@ -1,0 +1,27 @@
+<div class="calendar-header flex justify-between items-center mb-2">
+  <button (click)="prevMonth()">←</button>
+  <div class="text-lg font-semibold">
+    {{ year() }} - {{ monthIndex() + 1 }}
+  </div>
+  <button (click)="nextMonth()">→</button>
+</div>
+
+<div class="grid grid-cols-7 gap-1 text-center">
+
+  @for (d of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; track d) {
+    <div class="font-bold text-sm">{{ d }}</div>
+  }
+
+  @for (e of emptyStartDays; track e) {
+    <div></div>
+  }
+
+  @for (day of calendar(); track day) {
+    <div
+      class="cursor-pointer p-1 rounded hover:bg-purple-100"
+      (click)="onDateClick(day)"
+    >
+      {{ day.getDate() }}
+    </div>
+  }
+</div>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CalendarComponent } from "../event-calendar/event-calendar.component";
 
 interface Event {
   id: number;
@@ -12,7 +13,7 @@ interface Event {
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, CalendarComponent],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.css'
 })
@@ -23,5 +24,3 @@ export class EventListComponent {
   ];
 
 }
-
-
