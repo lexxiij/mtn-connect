@@ -1,0 +1,82 @@
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: linear-gradient(90deg, #6a11cb, #ee0979);
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.site-header .logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #e4ae24;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links .nav-button {
+  padding: 8px 16px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-links .nav-button:hover {
+  background-color: #ff6a00; /* hover accent */
+  color: #1d2410;
+}
+
+.nav-links .nav-button.admin {
+  background-color: #e4ae24;
+  color: #1d2410;
+}
+
+.nav-links .nav-button.admin:hover {
+  background-color: #ff6a00;
+  color: #fff;
+}
+
+.container {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: left;
+  padding: 5px 20px;
+  border-radius: 5px;
+  background: #e4ae24;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .nav-links {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+.calendar-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  border: 3px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background-color: #f9f9f9;
+  padding: 10px;
+}
+
+
+
