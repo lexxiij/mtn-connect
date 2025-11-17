@@ -1,6 +1,150 @@
   <button class= "btn-primary" routerLink="/home">Back to Dashboard</button>
 <div class="container">
   <h2>Event Registration</h2>
-  <p> Registration Form Coming Soon! </p>
-</div>
 
+<label
+  >Name
+  <input name="name" [(ngModel)]="fullName"
+  required #nameCtrl="ngModel"
+/>
+</label>
+@if ((nameCtrl.touched || submitted) && nameCtrl.errors?.['required']) {
+  <small class="error">Name required</small> }
+
+<label
+  >Date of Birth
+  <input
+    name="dob"
+    type="date"
+    [(ngModel)]="dob"
+    #dobCtrl="ngModel"
+/>
+</label>
+@if ((dobCtrl.touched || submitted) && dobCtrl.errors) { @if (dobCtrl.errors['required']) {
+  <small class="error">Date of Birth required</small> }
+@if (dobCtrl.errors['max'] && (dobCtrl.touched || submitted)) {
+  <small class="error">You must be at least 17 years old to register.</small> }
+  }
+
+<label
+  >Phone
+  <input
+    name="phone"
+    type="text"
+    [(ngModel)]="phone"
+    pattern="^[0-9\\-\\+\\s\\(\\)]*$"
+    #phoneCtrl="ngModel"
+
+/>
+</label>
+@if (phoneCtrl.errors?.['pattern']) {
+  <small class="error">Invalid phone format</small>
+}
+
+<label
+  >Email
+  <input
+    name="email"
+    type="email"
+  [(ngModel)]="email"
+  required
+  email
+  #emailCtrl="ngModel"
+/>
+</label>
+@if ((emailCtrl.touched || submitted) && emailCtrl.errors) { @if (emailCtrl.errors['required']) {
+  <small class="error">Email required</small> }
+@if (emailCtrl.errors['email']) {
+  <small class="error">Email required</small> }
+}
+<label
+>County of Residence
+<select
+  >County of Residence
+  <input
+    name="county"
+  [(ngModel)]="missouriCounties"
+  required
+  #countyCtrl="ngModel"
+/>
+<option value="">Select a county...</option>
+        <option>Mississippi</option>
+        <option>Scott</option>
+        <option>New Madrid</option>
+        <option>Pemiscot</option>
+        <option>Butler</option>
+        <option>Bollinger</option>
+        <option>Dunklin</option>
+        <option>Saint Francois</option>
+        <option>Stoddard</option>
+        <option>Saint Genevieve</option>
+  </select>
+</label>
+
+@if ((countyCtrl.touched || submitted) && countyCtrl.errors) { @if (countyCtrl.errors['required']) {
+  <small class="error">Please select a county</small> }
+}
+
+<label
+  >Training Type
+  <select
+    name="trainingType"
+    [(ngModel)]="trainingType"
+    required
+    #typeCtrl="ngModel"
+    >
+   <option value="">Select a training type...</option>
+        <option>Forklift</option>
+        <option>CDL</option>
+        <option>Shipyard Welding</option>
+  </select>
+</label>
+
+@if ((typeCtrl.touched || submitted) && typeCtrl.errors) { @if (typeCtrl.errors['required']) {
+  <small class="error">Please select a training</small> }
+}
+<label>
+    How did you hear about this Workskills Training Program?
+    <select
+      name="heardFrom"
+      [(ngModel)]="heardFrom"
+      required
+      #heardCtrl="ngModel"
+    >
+      <option value="">Select one...</option>
+      <option>Social Media</option>
+      <option>Friend or Colleague</option>
+      <option>Website</option>
+      <option>Advertisement</option>
+      <option>Other</option>
+    </select>
+  </label>
+  @if ((heardCtrl.touched || submitted) && heardCtrl.errors?.['required']) {
+    <small class="error">Please select how you heard about us</small>
+  }
+  @if (heardFrom === 'Other') {
+    <label>
+      Please specify
+      <input
+        name="heardOther"
+        [(ngModel)]="heardOther"
+        #heardOtherCtrl="ngModel"
+        placeholder="Describe how you found us"
+      />
+    </label>
+  }
+ <label>
+    Comments
+    <textarea
+      name="comments"
+      [(ngModel)]="comments"
+      rows="3"
+      placeholder="Optional"
+    ></textarea>
+  </label>
+
+  <button type="submit" [disabled]="form.invalid">Send</button>
+
+@if (submitted) {
+  <p class="success"> Registration Submitted Successfully</p>
+}
