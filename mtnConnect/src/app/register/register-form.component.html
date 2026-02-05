@@ -1,11 +1,14 @@
-  <button class= "btn-primary" routerLink="/home">Back to Dashboard</button>
-<div class="container">
-  <h2>Event Registration</h2>
+<button class= "btn-primary" routerLink="/">Back to Dashboard</button>
+<div class="form-container">
+  <h2>Training Registration</h2>
 
+<form #form="ngForm" (ngSubmit)="submit(form)">
 <label
   >Name
-  <input name="name" [(ngModel)]="fullName"
-  required #nameCtrl="ngModel"
+  <input name="name"
+  [(ngModel)]="fullName"
+  required
+  #nameCtrl="ngModel"
 />
 </label>
 @if ((nameCtrl.touched || submitted) && nameCtrl.errors?.['required']) {
@@ -143,8 +146,12 @@
     ></textarea>
   </label>
 
-  <button type="submit" [disabled]="form.invalid">Send</button>
+  <button type="submit">Register</button>
+</form>
+</div>
 
-@if (submitted) {
-  <p class="success"> Registration Submitted Successfully</p>
+@if (success) {
+  <p class="success"> Registration Submitted Successfully!</p>
+} @else if (submitted && form.invalid) {
+  <p class ="error"> Please complete all fields.</p>
 }
