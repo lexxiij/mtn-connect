@@ -10,19 +10,41 @@
   </nav>
 </header>
 
+<header class="site-header">
+  <div class="logo">
+    <h1>MTN,Inc.</h1>
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/home" class="nav-button">Home</a>
+    <a routerLink="/events" class="nav-button">Events</a>
+    <a routerLink="/contact" class="nav-button">Contact</a>
+    <a routerLink="/admin" class="nav-button admin">Admin</a>
+  </nav>
+</header>
+
 <div class="calendar-container">
   <full-calendar [options]="calendarOptions"></full-calendar>
 </div>
+
 <div class="container">
   <h2>Upcoming Events</h2>
-<ul>
-  @for (event of events; track event.id) {
-    <li>
-      <strong>{{ event.name }}</strong> - {{ event.date | date: 'fullDate' }}
+
+  <div *ngIf="loading">Loading events...</div>
+  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+  <ul *ngIf="calendarEvents.length > 0">
+    <li *ngFor="let event of calendarEvents; trackBy: trackById">
+      <strong>{{ event.title }}</strong> -
+      {{ event.date ? ($any(event.date) | date: 'fullDate') : 'TBD' }}
+      <button
+        class="btn-primary"
+        [routerLink]="['/register']"
+        [queryParams]="{ eventId: event.id, eventTitle: event.title }"
+      >
+        Register Now!
+      </button>
     </li>
-    <button class= "btn-primary" routerLink="/register">Register Now!</button>
-  } @empty {
-    <li>No upcoming events.</li>
-  }
-</ul>
+  </ul>
+
+  <p *ngIf="calendarEvents.length === 0 && !loading">No upcoming events.</p>
 </div>

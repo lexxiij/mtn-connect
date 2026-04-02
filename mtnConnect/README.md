@@ -1,64 +1,72 @@
 # MeetTheNeedConnects
 
-MeetTheNeedConnects is a Career Development Portal currently in developement.
-This initial version focuses on:
-  Event Listing
-  RSVP/Registration Flow
+MeetTheNeedConnects is a **Career Development Portal** in development. This version focuses on:
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.3.
+- **Event listing** — View training events (e.g. Forklift, CDL) on a calendar.
+- **RSVP / registration** — Users register for a training with contact info, county, and how they heard about the program.
+- **Contact** — Contact information for the program.
+- **Attendees (admin)** — List and manage registrations (CRUD-style UI).
+
+## Setup
+
+All commands below are run from the **`mtnConnect/`** directory (where `angular.json` lives).
+
+```bash
+cd mtnConnect
+npm install
+ng serve
+```
+
+Open [http://localhost:4200/](http://localhost:4200/).
+
+## Project structure
+
+- **`src/app/`** — Angular app code.
+  - **`app.routes.ts`** — Route definitions (`/`, `/home`, `/events`, `/register`, `/contact`, `/attendees`).
+  - **`models/attendee.model.ts`** — Shared TypeScript interface for attendee/registration data. **Single source of truth** for attendee shape; components and services should import from here.
+  - **`services/`** — Shared logic (e.g. `AdminAttendeesService` for attendee-related API calls).
+  - **`event-list/`**, **`register/`**, **`contact/`**, **`adminattendee-list/`**, **`home/`** — Feature components (each with `.ts`, `.html`, `.css`).
+- **`public/`** — Static assets.
+
+## API (planned)
+
+- **POST** `/api/attendees` — Submit registration; body matches the `attendee` interface.
+- **GET** `/api/attendees` — List attendees (e.g. for admin view).
+
+Environment: any API base URL can be configured via environment or app config when the backend is added.
 
 ## Development server
 
-To start a local development server, run:
+From **`mtnConnect/`**:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
 ## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 ```bash
 ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
 ng generate --help
 ```
 
-## Building
-
-To build the project run:
+## Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Output: `dist/mtn-connect/`.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Tests
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+E2E: `ng e2e` (configure a framework as needed).
 
-For end-to-end (e2e) testing, run:
+## Additional resources
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI](https://angular.dev/tools/cli)
+- [Angular Docs](https://angular.dev)

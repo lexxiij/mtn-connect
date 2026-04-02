@@ -1,82 +1,106 @@
-.site-header {
+/*Page wrapper*/
+.events-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/*Section heading*/
+.section-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
-  background: linear-gradient(90deg, #6a11cb, #ee0979);
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.site-header .logo h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #e4ae24;
-  margin: 0;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links .nav-button {
-  padding: 8px 16px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #fff;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.nav-links .nav-button:hover {
-  background-color: #ff6a00; /* hover accent */
-  color: #1d2410;
-}
-
-.nav-links .nav-button.admin {
-  background-color: #e4ae24;
-  color: #1d2410;
-}
-
-.nav-links .nav-button.admin:hover {
-  background-color: #ff6a00;
-  color: #fff;
-}
-
-.container {
-  display: inline-flex;
   justify-content: space-between;
-  align-items: left;
-  padding: 5px 20px;
-  border-radius: 5px;
-  background: #e4ae24;
-  color: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* Responsive for mobile */
-@media (max-width: 768px) {
-  .site-header {
+.section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+/*Calendar*/
+/* styles.css or event-list.component.css */
+
+.calendar-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  height: 600px; /* fixed height so calendar is visible */
+}
+
+.fullcalendar {
+  height: 100%;
+}
+
+/*Event list (below calendar)*/
+.container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 28px 32px;
+}
+
+.container h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.container ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text);
+  gap: 16px;
+}
+
+.container ul li strong {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* "Register Now!" button sits next to each event in the list */
+.container ul .btn-primary {
+  white-space: nowrap;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+/* Empty state */
+.container ul li:only-child {
+  color: var(--text-muted);
+  border-left-color: var(--border);
+  font-style: italic;
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .container ul li {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  .nav-links {
-    width: 100%;
-    justify-content: space-around;
-  }
 }
-.calendar-container {
-  width: 90%;
-  max-width: 800px;
-  margin: 20px auto;
-  border: 3px solid #333;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  background-color: #f9f9f9;
-  padding: 10px;
-}
-
-
-

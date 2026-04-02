@@ -1,0 +1,46 @@
+<button class="btn-primary" routerLink="/">Back to Home</button>
+
+<div class="form-container">
+  <h2>Admin Login</h2>
+
+  <form #form="ngForm" (ngSubmit)="submit(form)">
+
+    <label>
+      Username
+      <input
+        name="username"
+        [(ngModel)]="username"
+        required
+        #usernameCtrl="ngModel"
+        autocomplete="username"
+      />
+    </label>
+    @if ((usernameCtrl.touched || submitted) && usernameCtrl.errors?.['required']) {
+      <small class="error">Username is required</small>
+    }
+
+    <label>
+      Password
+      <input
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        #passwordCtrl="ngModel"
+        autocomplete="current-password"
+      />
+    </label>
+    @if ((passwordCtrl.touched || submitted) && passwordCtrl.errors?.['required']) {
+      <small class="error">Password is required</small>
+    }
+
+    @if (errorMsg) {
+      <p class="error">{{ errorMsg }}</p>
+    }
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Logging in...' : 'Log In' }}
+    </button>
+
+  </form>
+</div>

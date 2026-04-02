@@ -16,6 +16,7 @@ import { NgIf } from '@angular/common';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Event-Registration';
+  title = 'mtnConnect';
+  currentYear = new Date().getFullYear(); // Used in the footer template
 }
 

@@ -1,45 +1,95 @@
-.site-header {
+/*Back button area*/
+.admin-back {
+  padding: 24px 32px 0;
+}
+
+/*Main Admin Panel*/
+.container {
+  max-width: 860px;
+  margin: 32px auto 60px;
+  padding: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+
+  /* Purple accent on the left edge signals "admin" area */
+  border-left: 4px solid var(--accent);
+}
+
+.container h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-bottom: 10px;
+}
+
+.container p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Admin header row with logout button */
+.admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
-  background: linear-gradient(90deg, #6a11cb, #ee0979);
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
 
-.site-header .logo h1 {
-  font-size: 1.8rem;
+/* Responsive table */
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+th {
   font-weight: 700;
-  color: #e4ae24;
-  margin: 0;
+  background: var(--accent-light, #f3f0ff);
+  color: var(--accent, #6d28d9);
 }
 
-.nav-links {
-  display: flex;
-  gap: 20px;
+.editing-row td {
+  background: #fffbeb;
 }
 
-.nav-links .nav-button {
-  padding: 8px 16px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #fff;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+.editing-row input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
-.nav-links .nav-button:hover {
-  background-color: #ff6a00; /* hover accent */
-  color: #1d2410;
-}
+.btn-edit    { background: #3b82f6; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-right: 4px; }
+.btn-delete  { background: #ef4444; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+.btn-save    { background: #10b981; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-right: 4px; }
+.btn-cancel  { background: #6b7280; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+.btn-logout  { background: #ef4444; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
 
-.nav-links .nav-button.admin {
-  background-color: #e4ae24;
-  color: #1d2410;
-}
-
-.nav-links .nav-button.admin:hover {
-  background-color: #ff6a00;
-  color: #fff;
+/*Admin Badge*/
+.admin-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }

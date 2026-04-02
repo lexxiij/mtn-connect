@@ -1,144 +1,83 @@
-.site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background: linear-gradient(90deg, #6a11cb, #ee0979);
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.site-header .logo h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #e4ae24;
-  margin: 0;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links .nav-button {
-  padding: 8px 16px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #fff;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.nav-links .nav-button:hover {
-  background-color: #ff6a00; /* hover accent */
-  color: #1d2410;
-}
-
-.nav-links .nav-button.admin {
-  background-color: #e4ae24;
-  color: #1d2410;
-}
-
-.nav-links .nav-button.admin:hover {
-  background-color: #ff6a00;
-  color: #fff;
-}
-
-/* Responsive for mobile */
-@media (max-width: 768px) {
-  .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .nav-links {
-    width: 100%;
-    justify-content: space-around;
-  }
-}
-/* Container for dashboard */
+/*Hero Section*/
 .dashboard-container {
-  max-width: 900px;
-  margin: 50px auto;
-  padding: 20px;
+  background: linear-gradient(160deg, var(--primary-light) 0%, var(--bg) 60%);
+  padding: 72px 24px 80px;
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Headline */
-h1 {
-  font-size: 2.5rem;
-  color: #e4ae24;
-  margin-bottom: 10px;
+.dashboard-container h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem); /* clamp = responsive font size! */
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin-bottom: 14px;
 }
 
-/* Subtext */
-p {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 40px;
+.dashboard-container > p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 480px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
 }
 
-/* Card grid */
+/* ── Feature Cards ─────────────────────────────────────────── */
 .cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* Individual card style */
 .card {
-  flex: 1 1 250px;
-  max-width: 250px;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 30px 20px;
+  flex: 1 1 240px;
+  max-width: 270px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
   text-decoration: none;
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  color: var(--text);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-top: 4px solid transparent; /* Colored accent top border */
 }
 
-/* Hover effect */
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Card colors */
-.card-contact {
-  background: linear-gradient(135deg, #6a11cb, #1d2410);
-}
-
-.card-events {
-  background: linear-gradient(135deg, #ff6a00, #ee0979);
-}
-
-.card-attendees {
-  background: linear-gradient(135deg, #28a745, #218838);
-}
-
+/* Each card gets a colored "accent" stripe at the top */
+.card-events    { border-top-color: var(--primary); }
+.card-contact   { border-top-color: var(--success); }
+.card-attendees { border-top-color: var(--accent); }
 
 .card h2 {
-  margin-bottom: 10px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
 }
-
 
 .card p {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
 }
 
-
+/*Mobile*/
 @media (max-width: 600px) {
   .cards {
     flex-direction: column;
     align-items: center;
   }
-
   .card {
     max-width: 90%;
+    width: 100%;
   }
 }
