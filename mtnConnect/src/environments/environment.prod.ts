@@ -8,5 +8,5 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'https://YOUR-BACKEND-URL.onrender.com/api', // ← change this after deploying
+  apiUrl: 'https://mtnconnect.onrender.com/api',
 };
