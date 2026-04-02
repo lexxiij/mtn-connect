@@ -11,8 +11,14 @@ import { environment } from '../../environments/environment';
 export interface TrainingEvent {
   _id: string;
   title: string;
-  date: string; // ISO string from MongoDB
+  date: string;
+  description?: string;
+  location?: string;
+  trainingType?: string;
 }
+
+// Type for creating/updating — no _id needed
+export type EventPayload = Omit<TrainingEvent, '_id'>;
 
 @Injectable({
   providedIn: 'root',
@@ -23,14 +29,28 @@ export class EventsService {
 
   constructor(private http: HttpClient) {}
 
-  // Fetch all events
+  // GET /api/events — public, no auth needed
   getAll(): Observable<TrainingEvent[]> {
     return this.http.get<TrainingEvent[]>(this.apiUrl).pipe(
       catchError((err) => {
         console.error('Error fetching events:', err);
-        // Return empty array if backend is unreachable
         return of([]);
       })
     );
+  }
+
+  // POST /api/events — admin only (auth interceptor adds the token automatically)
+  create(payload: EventPayload): Observable<TrainingEvent> {
+    return this.http.post<TrainingEvent>(this.apiUrl, payload);
+  }
+
+  // PUT /api/events/:id — admin only
+  update(id: string, payload: EventPayload): Observable<TrainingEvent> {
+    return this.http.put<TrainingEvent>(`${this.apiUrl}/${id}`, payload);
+  }
+
+  // DELETE /api/events/:id — admin only
+  delete(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
 }

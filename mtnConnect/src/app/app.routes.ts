@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { EventListComponent } from './event-list/event-list.component';
 import { RegistrationFormComponent } from './register/register-form.component';
 import { AttendeeListComponent } from './adminattendee-list/adminattendee-list.component';
+import { AdminEventsComponent } from './admin-events/admin-events.component';
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { authGuard } from './guards/auth.guard';
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'contact',  component: ContactComponent },
   { path: 'login',    component: LoginComponent },
 
-  // Protected admin route — the authGuard runs before this page loads
-  { path: 'attendees', component: AttendeeListComponent, canActivate: [authGuard] },
+  // Protected admin routes — authGuard redirects to /login if not authenticated
+  { path: 'attendees',    component: AttendeeListComponent,  canActivate: [authGuard] },
+  { path: 'admin-events', component: AdminEventsComponent,   canActivate: [authGuard] },
 ];

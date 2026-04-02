@@ -1,7 +1,10 @@
 <div class="container">
   <div class="admin-header">
     <h2>Admin Dashboard — Registered Attendees</h2>
-    <button class="btn-logout" (click)="logout()">Log Out</button>
+    <div class="header-actions">
+      <a routerLink="/admin-events" class="btn-manage-events">Manage Events</a>
+      <button class="btn-logout" (click)="logout()">Log Out</button>
+    </div>
   </div>
 
   <!-- Error banner -->
