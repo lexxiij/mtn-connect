@@ -12,6 +12,7 @@ export interface TrainingEvent {
   _id: string;
   title: string;
   date: string;
+  time?: string;        // "HH:MM" — optional, shown alongside the date
   description?: string;
   location?: string;
   trainingType?: string;

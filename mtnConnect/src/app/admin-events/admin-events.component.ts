@@ -32,6 +32,7 @@ export class AdminEventsComponent implements OnInit {
   formData: EventPayload = {
     title: '',
     date: '',
+    time: '',
     description: '',
     location: '',
     trainingType: '',
@@ -64,7 +65,7 @@ export class AdminEventsComponent implements OnInit {
   // Open a blank form to add a new event
   openAddForm(): void {
     this.editingId = null;
-    this.formData = { title: '', date: '', description: '', location: '', trainingType: '' };
+    this.formData = { title: '', date: '', time: '', description: '', location: '', trainingType: '' };
     this.showForm = true;
     this.errorMsg = '';
     this.successMsg = '';
@@ -76,6 +77,7 @@ export class AdminEventsComponent implements OnInit {
     this.formData = {
       title: event.title,
       date: event.date,
+      time: event.time || '',
       description: event.description || '',
       location: event.location || '',
       trainingType: event.trainingType || '',

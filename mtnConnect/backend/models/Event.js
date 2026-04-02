@@ -7,6 +7,7 @@ const eventSchema = new mongoose.Schema(
   {
     title:       { type: String, required: true, trim: true },
     date:        { type: String, required: true },   // "YYYY-MM-DD" format for FullCalendar
+    time:        { type: String, default: '' },      // "HH:MM" 24-hour format, optional
     description: { type: String, default: '' },
     location:    { type: String, default: '' },
     trainingType:{ type: String, default: '' },      // e.g. "CDL", "Forklift", "Shipyard Welding"

@@ -24,6 +24,7 @@
     <li *ngFor="let event of calendarEvents; trackBy: trackById">
       <strong>{{ event.title }}</strong> -
       {{ event.date ? ($any(event.date) | date: 'fullDate') : 'TBD' }}
+      {{ $any(event).time ? 'at ' + $any(event).time : '' }}
       <button
         class="btn-primary"
         [routerLink]="['/register']"

@@ -4,6 +4,22 @@
   padding: 0 24px;
 }
 
+/* Side-by-side date + time inputs */
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.optional {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
 /* ── Header ── */
 .admin-header {
   display: flex;
