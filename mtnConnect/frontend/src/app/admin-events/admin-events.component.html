@@ -1,0 +1,126 @@
+<div class="container">
+
+  <!-- Header bar -->
+  <div class="admin-header">
+    <h2>Admin — Manage Events</h2>
+    <div class="header-actions">
+      <a routerLink="/home" class="btn-secondary">Home</a>
+      <a routerLink="/attendees" class="btn-secondary">View Attendees</a>
+      <button class="btn-logout" (click)="logout()">Log Out</button>
+    </div>
+  </div>
+
+  <!-- Feedback messages -->
+  @if (successMsg) {
+    <p class="success">{{ successMsg }}</p>
+  }
+  @if (errorMsg) {
+    <p class="error">{{ errorMsg }}</p>
+  }
+
+  <!-- Add Event button — only shown when form is hidden -->
+  @if (!showForm) {
+    <button class="btn-primary" (click)="openAddForm()">+ Add New Event</button>
+  }
+
+  <!-- Add / Edit Form -->
+  @if (showForm) {
+    <div class="form-card">
+      <h3>{{ editingId ? 'Edit Event' : 'New Event' }}</h3>
+
+      <form #eventForm="ngForm" (ngSubmit)="submit(eventForm)">
+
+        <div class="form-group">
+          <label for="title">Title <span class="required">*</span></label>
+          <input id="title" name="title" type="text"
+            [(ngModel)]="formData.title" required
+            placeholder="e.g. Forklift Training Orientation" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Date <span class="required">*</span></label>
+            <input id="date" name="date" type="date"
+              [(ngModel)]="formData.date" required />
+          </div>
+          <div class="form-group">
+            <label for="time">Time <span class="optional">(optional)</span></label>
+            <input id="time" name="time" type="time"
+              [(ngModel)]="formData.time" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="trainingType">Training Type</label>
+          <input id="trainingType" name="trainingType" type="text"
+            [(ngModel)]="formData.trainingType"
+            placeholder="e.g. CDL, Forklift, Shipyard Welding" />
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input id="location" name="location" type="text"
+            [(ngModel)]="formData.location"
+            placeholder="e.g. Charleston, MO" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="3"
+            [(ngModel)]="formData.description"
+            placeholder="Optional details about the event"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            {{ editingId ? 'Save Changes' : 'Create Event' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="cancelForm()">Cancel</button>
+        </div>
+
+      </form>
+    </div>
+  }
+
+  <!-- Events Table -->
+  @if (loading) {
+    <p>Loading events...</p>
+  }
+
+  @if (!loading && events.length === 0 && !showForm) {
+    <p class="empty">No events yet. Click "Add New Event" to create one.</p>
+  }
+
+  @if (!loading && events.length > 0) {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (event of events; track event._id) {
+            <tr>
+              <td>{{ event.title }}</td>
+              <td>{{ event.date | date: 'mediumDate' }}</td>
+              <td>{{ event.time || '—' }}</td>
+              <td>{{ event.trainingType || '—' }}</td>
+              <td>{{ event.location || '—' }}</td>
+              <td class="actions">
+                <button class="btn-edit" (click)="openEditForm(event)">Edit</button>
+                <button class="btn-delete" (click)="deleteEvent(event._id, event.title)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>

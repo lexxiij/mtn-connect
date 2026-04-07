@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="admin-header">
+    <h2>Admin Dashboard — Registered Attendees</h2>
+    <div class="header-actions">
+      <a routerLink="/home" class="btn-home">Home</a>
+      <a routerLink="/admin-events" class="btn-manage-events">Manage Events</a>
+      <button class="btn-logout" (click)="logout()">Log Out</button>
+    </div>
+  </div>
+
+  <!-- Error banner -->
+  @if (errorMsg) {
+    <p class="error">{{ errorMsg }}</p>
+  }
+
+  <!-- Loading state -->
+  @if (loading) {
+    <p>Loading attendees...</p>
+  }
+
+  <!-- Empty state -->
+  @if (!loading && attendees.length === 0 && !errorMsg) {
+    <p>No registrations yet.</p>
+  }
+
+  <!-- Attendee table -->
+  @if (!loading && attendees.length > 0) {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>County</th>
+            <th>Training</th>
+            <th>Heard From</th>
+            <th>Registered</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of attendees; track a._id) {
+
+            <!-- VIEW ROW -->
+            @if (editingId !== a._id) {
+              <tr>
+                <td>{{ a.name }}</td>
+                <td>{{ a.email }}</td>
+                <td>{{ a.phone }}</td>
+                <td>{{ a.county }}</td>
+                <td>{{ a.trainingType }}</td>
+                <td>{{ a.heardFrom }}</td>
+                <td>{{ a.createdAt | date:'shortDate' }}</td>
+                <td>
+                  <button class="btn-edit" (click)="startEdit(a)">Edit</button>
+                  <button class="btn-delete" (click)="deleteAttendee(a)">Delete</button>
+                </td>
+              </tr>
+            }
+
+            <!-- EDIT ROW — shown inline when this attendee is being edited -->
+            @if (editingId === a._id) {
+              <tr class="editing-row">
+                <td><input [(ngModel)]="editData.name"         [name]="'edit_name_' + a._id"  /></td>
+                <td><input [(ngModel)]="editData.email"        [name]="'edit_email_' + a._id" type="email" /></td>
+                <td><input [(ngModel)]="editData.phone"        [name]="'edit_phone_' + a._id" /></td>
+                <td><input [(ngModel)]="editData.county"       [name]="'edit_county_' + a._id" /></td>
+                <td><input [(ngModel)]="editData.trainingType" [name]="'edit_type_' + a._id"  /></td>
+                <td><input [(ngModel)]="editData.heardFrom"    [name]="'edit_heard_' + a._id" /></td>
+                <td>—</td>
+                <td>
+                  <button class="btn-save" (click)="saveEdit()">Save</button>
+                  <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+                </td>
+              </tr>
+            }
+
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <button class="btn-primary" routerLink="/home">Back to Home</button>
+</div>

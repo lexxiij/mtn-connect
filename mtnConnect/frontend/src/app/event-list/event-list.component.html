@@ -1,0 +1,47 @@
+<header class="site-header">
+  <div class="logo">
+    <img src="mtn-logo.png" alt="Meet The Need, Inc." class="logo-img" />
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/home" class="nav-button">Home</a>
+    <a routerLink="/events" class="nav-button">Events</a>
+    <a routerLink="/contact" class="nav-button">Contact</a>
+    <a routerLink="/login" class="nav-button admin">Admin</a>
+  </nav>
+</header>
+
+<div class="events-layout">
+
+  <!-- LEFT: Upcoming Events list -->
+  <div class="container">
+    <h2>Upcoming Events</h2>
+
+    <div *ngIf="loading">Loading events...</div>
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+    <ul *ngIf="calendarEvents.length > 0">
+      <li *ngFor="let event of calendarEvents; trackBy: trackById">
+        <div class="event-info">
+          <strong>{{ event.title }}</strong>
+          <span>{{ event.date ? ($any(event.date) | date: 'fullDate') : 'TBD' }}
+          {{ $any(event).time ? 'at ' + $any(event).time : '' }}</span>
+        </div>
+        <button
+          class="btn-primary"
+          [routerLink]="['/register']"
+          [queryParams]="{ eventId: event.id, eventTitle: event.title }"
+        >
+          Register Now!
+        </button>
+      </li>
+    </ul>
+
+    <p *ngIf="calendarEvents.length === 0 && !loading">No upcoming events.</p>
+  </div>
+
+  <!-- RIGHT: Calendar -->
+  <div class="calendar-container">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+</div>

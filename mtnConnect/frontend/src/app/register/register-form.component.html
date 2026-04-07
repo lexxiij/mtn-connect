@@ -1,0 +1,106 @@
+<button class="btn-primary" routerLink="/">Back to Dashboard</button>
+<div class="form-container">
+  <h2>Training Registration</h2>
+
+  <form #form="ngForm" (ngSubmit)="submit(form)">
+
+    <label>Name
+      <input name="name" [(ngModel)]="fullName" required #nameCtrl="ngModel" />
+    </label>
+    @if ((nameCtrl.touched || submitted) && nameCtrl.errors?.['required']) {
+      <small class="error">Name required</small>
+    }
+
+    <label>Date of Birth
+      <input name="dob" type="date" [(ngModel)]="dob" #dobCtrl="ngModel" />
+    </label>
+
+    <label>Phone
+      <input
+        name="phone"
+        type="text"
+        [(ngModel)]="phone"
+        pattern="^[0-9\-\+\s\(\)]*$"
+        #phoneCtrl="ngModel"
+      />
+    </label>
+    @if (phoneCtrl.errors?.['pattern']) {
+      <small class="error">Invalid phone format</small>
+    }
+
+    <label>Email
+      <input name="email" type="email" [(ngModel)]="email" required email #emailCtrl="ngModel" />
+    </label>
+    @if ((emailCtrl.touched || submitted) && emailCtrl.errors?.['required']) {
+      <small class="error">Email required</small>
+    }
+    @if ((emailCtrl.touched || submitted) && emailCtrl.errors?.['email']) {
+      <small class="error">Please enter a valid email</small>
+    }
+    <label>County of Residence
+      <select name="county" [(ngModel)]="county" required #countyCtrl="ngModel">
+        <option value="">Select a county...</option>
+        @for (c of missouriCounties; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </label>
+    @if ((countyCtrl.touched || submitted) && countyCtrl.errors?.['required']) {
+      <small class="error">Please select a county</small>
+    }
+
+    <label>Training Type
+      <select name="trainingType" [(ngModel)]="trainingType" required #typeCtrl="ngModel">
+        <option value="">Select a training type...</option>
+        <option>Forklift</option>
+        <option>CDL</option>
+        <option>Shipyard Welding</option>
+      </select>
+    </label>
+    @if ((typeCtrl.touched || submitted) && typeCtrl.errors?.['required']) {
+      <small class="error">Please select a training</small>
+    }
+
+    <label>
+      How did you hear about this Workskills Training Program?
+      <select name="heardFrom" [(ngModel)]="heardFrom" required #heardCtrl="ngModel">
+        <option value="">Select one...</option>
+        <option>Social Media</option>
+        <option>Friend or Colleague</option>
+        <option>Website</option>
+        <option>Advertisement</option>
+        <option>Other</option>
+      </select>
+    </label>
+    @if ((heardCtrl.touched || submitted) && heardCtrl.errors?.['required']) {
+      <small class="error">Please select how you heard about us</small>
+    }
+
+    @if (heardFrom === 'Other') {
+      <label>
+        Please specify
+        <input name="heardOther" [(ngModel)]="heardOther" placeholder="Describe how you found us" />
+      </label>
+    }
+
+    <label>
+      Comments
+      <textarea name="comments" [(ngModel)]="comments" rows="3" placeholder="Optional"></textarea>
+    </label>
+
+    @if (errorMsg) {
+      <p class="error">{{ errorMsg }}</p>
+    }
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Submitting...' : 'Register' }}
+    </button>
+
+  </form>
+</div>
+
+@if (success) {
+  <p class="success">Registration Submitted Successfully!</p>
+} @else if (submitted && form.invalid) {
+  <p class="error">Please complete all required fields.</p>
+}
