@@ -7,7 +7,6 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
-// Define the type for a training event
 export interface TrainingEvent {
   _id: string;
   title: string;
@@ -18,14 +17,13 @@ export interface TrainingEvent {
   trainingType?: string;
 }
 
-// Type for creating/updating — no _id needed
+// payload type (no _id)
 export type EventPayload = Omit<TrainingEvent, '_id'>;
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventsService {
-  // Uses environment.apiUrl so Angular swaps localhost ↔ production URL automatically
   private apiUrl = `${environment.apiUrl}/events`;
 
   constructor(private http: HttpClient) {}
@@ -40,17 +38,17 @@ export class EventsService {
     );
   }
 
-  // POST /api/events — admin only (auth interceptor adds the token automatically)
+  // POST /api/events
   create(payload: EventPayload): Observable<TrainingEvent> {
     return this.http.post<TrainingEvent>(this.apiUrl, payload);
   }
 
-  // PUT /api/events/:id — admin only
+  // PUT /api/events/:id
   update(id: string, payload: EventPayload): Observable<TrainingEvent> {
     return this.http.put<TrainingEvent>(`${this.apiUrl}/${id}`, payload);
   }
 
-  // DELETE /api/events/:id — admin only
+  // DELETE /api/events/:id
   delete(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }

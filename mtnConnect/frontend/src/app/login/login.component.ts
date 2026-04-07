@@ -31,17 +31,14 @@ export class LoginComponent {
 
     this.loading = true;
 
-    // auth.login() returns an Observable — we must subscribe() to trigger the HTTP call.
-    // subscribe({ next, error }) handles success and failure separately.
     this.auth.login(this.username, this.password).subscribe({
       next: () => {
         this.loading = false;
-        // On success, navigate to the admin attendee list
         this.router.navigate(['/attendees']);
       },
       error: (err) => {
         this.loading = false;
-        // err.error.message comes from our Express route's res.json({ message: '...' })
+        // message comes from the server response
         this.errorMsg = err.error?.message || 'Login failed. Please try again.';
       },
     });

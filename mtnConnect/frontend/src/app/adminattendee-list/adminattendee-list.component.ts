@@ -29,8 +29,6 @@ export class AttendeeListComponent implements OnInit {
     private router: Router
   ) {}
 
-  // ngOnInit runs once when the component is first rendered.
-  // This is where we load data from the API.
   ngOnInit(): void {
     this.loadAttendees();
   }
@@ -39,7 +37,6 @@ export class AttendeeListComponent implements OnInit {
     this.loading  = true;
     this.errorMsg = '';
 
-    // subscribe() triggers the HTTP GET and handles the response
     this.svc.getAll().subscribe({
       next: (data) => {
         this.attendees = data;
@@ -55,7 +52,7 @@ export class AttendeeListComponent implements OnInit {
   // Enter edit mode for a specific attendee row
   startEdit(a: attendee): void {
     this.editingId = a._id!;
-    // Spread into a new object so we're editing a COPY, not the original
+    // copy so we don't edit the original
     this.editData  = { ...a };
   }
 

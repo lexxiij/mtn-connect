@@ -1,11 +1,5 @@
 // services/auth.service.ts
-// Handles everything related to admin login/logout.
-//
-// KEY CONCEPTS for junior devs:
-//   - Injectable service: one class, shared across the whole app via Angular's DI system
-//   - BehaviorSubject: an RxJS "observable variable" that emits its current value
-//     to any subscriber and also gives you the current value via .value
-//   - localStorage: browser key/value storage that PERSISTS after page refresh
+// handles login, logout, and token storage
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -16,36 +10,31 @@ const TOKEN_KEY = 'mtn_admin_token'; // the key we use to store the JWT in local
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // BehaviorSubject(false) starts as "not logged in".
-  // Components can subscribe to isLoggedIn$ to react when auth state changes.
+  // starts as logged out, updates when user logs in/out
   private isLoggedIn$ = new BehaviorSubject<boolean>(this.hasValidToken());
 
   constructor(private http: HttpClient) {}
 
-  // Called once at service creation: checks whether a token already exists
-  // in localStorage (i.e. the user was previously logged in)
+  // check if user is still logged in from last session
   private hasValidToken(): boolean {
     return !!localStorage.getItem(TOKEN_KEY);
   }
 
-  // Returns the current login state synchronously (useful for guards)
+  // used by guards
   get isLoggedIn(): boolean {
     return this.isLoggedIn$.value;
   }
 
-  // Returns the observable — use this in templates with async pipe
   get loggedIn$() {
     return this.isLoggedIn$.asObservable();
   }
 
-  // Returns the stored JWT so the HTTP interceptor can attach it to requests
+  // used by the interceptor to add auth header
   getToken(): string | null {
     return localStorage.getItem(TOKEN_KEY);
   }
 
-  // POST /api/auth/login
-  // tap() lets us "side-effect" the response without changing it:
-  // we save the token, then the observable passes the response along normally.
+  // POST /api/auth/login — save token on success
   login(username: string, password: string) {
     return this.http
       .post<{ token: string }>(`${environment.apiUrl}/auth/login`, { username, password })
