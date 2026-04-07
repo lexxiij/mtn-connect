@@ -100,7 +100,19 @@
 </div>
 
 @if (success) {
-  <p class="success">Registration Submitted Successfully!</p>
-} @else if (submitted && form.invalid) {
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon">✓</div>
+      <h3>Registration Submitted!</h3>
+      <p>
+        Thank you for submitting a registration form for the
+        <strong>{{ submittedType }}</strong> orientation.
+        Someone will be in contact with you soon by email or phone with more information.
+      </p>
+      <button class="modal-btn" (click)="success = false">Close</button>
+    </div>
+  </div>
+}
+@if (submitted && form.invalid) {
   <p class="error">Please complete all required fields.</p>
 }
