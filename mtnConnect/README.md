@@ -1,15 +1,16 @@
 # MeetTheNeedConnects
 
-MeetTheNeedConnects is a **Career Development Portal** in development. This version focuses on:
+A career development web app built with Angular 19. Still in progress.
 
-- **Event listing** — View training events (e.g. Forklift, CDL) on a calendar.
-- **RSVP / registration** — Users register for a training with contact info, county, and how they heard about the program.
-- **Contact** — Contact information for the program.
-- **Attendees (admin)** — List and manage registrations (CRUD-style UI).
+Current features:
+- Event calendar — shows upcoming training events (Forklift, CDL, etc.)
+- Registration form — users sign up for a training with their contact info
+- Contact page
+- Admin view — lets admins see and manage registrations
 
-## Setup
+## Getting started
 
-All commands below are run from the **`mtnConnect/`** directory (where `angular.json` lives).
+Run these from the `mtnConnect/` folder (that's where `angular.json` is):
 
 ```bash
 cd mtnConnect
@@ -17,56 +18,39 @@ npm install
 ng serve
 ```
 
-Open [http://localhost:4200/](http://localhost:4200/).
+Then open http://localhost:4200
 
 ## Project structure
 
-- **`src/app/`** — Angular app code.
-  - **`app.routes.ts`** — Route definitions (`/`, `/home`, `/events`, `/register`, `/contact`, `/attendees`).
-  - **`models/attendee.model.ts`** — Shared TypeScript interface for attendee/registration data. **Single source of truth** for attendee shape; components and services should import from here.
-  - **`services/`** — Shared logic (e.g. `AdminAttendeesService` for attendee-related API calls).
-  - **`event-list/`**, **`register/`**, **`contact/`**, **`adminattendee-list/`**, **`home/`** — Feature components (each with `.ts`, `.html`, `.css`).
-- **`public/`** — Static assets.
+```
+src/app/
+  app.routes.ts              - all routes
+  models/attendee.model.ts   - shared attendee interface (import from here, don't redefine it)
+  services/                  - shared services like AdminAttendeesService
+  event-list/                - events calendar component
+  register/                  - registration form
+  contact/                   - contact page
+  adminattendee-list/        - admin view for registrations
+  home/                      - home page
+```
+
+## Useful commands
+
+```bash
+ng serve          # start dev server
+ng build          # build for production
+ng generate component component-name   # scaffold a new component
+ng test           # run unit tests
+```
 
 ## API (planned)
 
-- **POST** `/api/attendees` — Submit registration; body matches the `attendee` interface.
-- **GET** `/api/attendees` — List attendees (e.g. for admin view).
+- `POST /api/attendees` — submit a registration
+- `GET /api/attendees` — get all registrations (admin only)
 
-Environment: any API base URL can be configured via environment or app config when the backend is added.
+The API base URL is set in `src/environments/environment.ts`.
 
-## Development server
+## Docs
 
-From **`mtnConnect/`**:
-
-```bash
-ng serve
-```
-
-## Code scaffolding
-
-```bash
-ng generate component component-name
-ng generate --help
-```
-
-## Build
-
-```bash
-ng build
-```
-
-Output: `dist/mtn-connect/`.
-
-## Tests
-
-```bash
-ng test
-```
-
-E2E: `ng e2e` (configure a framework as needed).
-
-## Additional resources
-
+- [Angular docs](https://angular.dev)
 - [Angular CLI](https://angular.dev/tools/cli)
-- [Angular Docs](https://angular.dev)

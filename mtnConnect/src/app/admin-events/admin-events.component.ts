@@ -1,6 +1,4 @@
-// admin-events/admin-events.component.ts
-// Admin page for managing training events — create, edit, and delete.
-// Protected by authGuard in app.routes.ts so only logged-in admins can access it.
+// admin page to add, edit, and delete events
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,13 +20,12 @@ export class AdminEventsComponent implements OnInit {
   errorMsg = '';
   successMsg = '';
 
-  // Controls whether the add/edit form is visible
   showForm = false;
 
-  // If editingId is set, we're editing that event. If null, we're creating a new one.
+  // null means we're creating a new event, otherwise it's the id of the one being edited
   editingId: string | null = null;
 
-  // The form model — bound to the HTML form with ngModel
+
   formData: EventPayload = {
     title: '',
     date: '',
@@ -62,7 +59,6 @@ export class AdminEventsComponent implements OnInit {
     });
   }
 
-  // Open a blank form to add a new event
   openAddForm(): void {
     this.editingId = null;
     this.formData = { title: '', date: '', time: '', description: '', location: '', trainingType: '' };
@@ -71,7 +67,6 @@ export class AdminEventsComponent implements OnInit {
     this.successMsg = '';
   }
 
-  // Pre-fill the form with an existing event's data to edit it
   openEditForm(event: TrainingEvent): void {
     this.editingId = event._id;
     this.formData = {
@@ -92,29 +87,26 @@ export class AdminEventsComponent implements OnInit {
     this.editingId = null;
   }
 
-  // Called when form is submitted — decides whether to create or update
   submit(form: NgForm): void {
     if (form.invalid) return;
     this.errorMsg = '';
     this.successMsg = '';
 
     if (this.editingId) {
-      // UPDATE existing event
       this.eventsService.update(this.editingId, this.formData).subscribe({
         next: () => {
           this.successMsg = 'Event updated!';
           this.showForm = false;
-          this.loadEvents(); // refresh the list
+          this.loadEvents();
         },
         error: () => { this.errorMsg = 'Failed to update event.'; },
       });
     } else {
-      // CREATE new event
       this.eventsService.create(this.formData).subscribe({
         next: () => {
           this.successMsg = 'Event created!';
           this.showForm = false;
-          this.loadEvents(); // refresh the list
+          this.loadEvents();
         },
         error: () => { this.errorMsg = 'Failed to create event.'; },
       });
@@ -122,7 +114,6 @@ export class AdminEventsComponent implements OnInit {
   }
 
   deleteEvent(id: string, title: string): void {
-    // window.confirm() shows a browser dialog — simple way to prevent accidents
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
 
     this.eventsService.delete(id).subscribe({

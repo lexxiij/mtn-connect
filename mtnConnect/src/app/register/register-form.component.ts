@@ -22,10 +22,11 @@ export class RegistrationFormComponent {
   heardFrom    = '';
   heardOther   = '';
   comments     = '';
-  submitted    = false;
-  success      = false;
-  loading      = false;
-  errorMsg     = '';
+  submitted            = false;
+  success              = false;
+  loading              = false;
+  errorMsg             = '';
+  submittedTrainingType = '';
 
   public missouriCounties: string[] = [
     'Mississippi', 'Scott', 'New Madrid', 'Pemiscot', 'Butler',
@@ -60,6 +61,7 @@ export class RegistrationFormComponent {
     this.attendeesSvc.create(payload).subscribe({
       next: () => {
         this.loading = false;
+        this.submittedTrainingType = this.trainingType;
         this.success = true;
         form.resetForm();
         this.submitted = false;

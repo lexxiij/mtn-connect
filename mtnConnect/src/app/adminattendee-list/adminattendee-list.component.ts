@@ -19,7 +19,7 @@ export class AttendeeListComponent implements OnInit {
   loading   = false;
   errorMsg  = '';
 
-  // Track which row is being edited (null = no row in edit mode)
+  // null means nothing is being edited right now
   editingId: string | null = null;
   editData: Partial<attendee> = {};
 
@@ -29,8 +29,6 @@ export class AttendeeListComponent implements OnInit {
     private router: Router
   ) {}
 
-  // ngOnInit runs once when the component is first rendered.
-  // This is where we load data from the API.
   ngOnInit(): void {
     this.loadAttendees();
   }
@@ -39,7 +37,6 @@ export class AttendeeListComponent implements OnInit {
     this.loading  = true;
     this.errorMsg = '';
 
-    // subscribe() triggers the HTTP GET and handles the response
     this.svc.getAll().subscribe({
       next: (data) => {
         this.attendees = data;
@@ -55,17 +52,15 @@ export class AttendeeListComponent implements OnInit {
   // Enter edit mode for a specific attendee row
   startEdit(a: attendee): void {
     this.editingId = a._id!;
-    // Spread into a new object so we're editing a COPY, not the original
+    // spread into a copy so changes don't affect the original until saved
     this.editData  = { ...a };
   }
 
-  // Save the edited row to the backend
   saveEdit(): void {
     if (!this.editingId) return;
 
     this.svc.update(this.editingId, this.editData).subscribe({
       next: (updated) => {
-        // Replace the old record in our local array with the updated one
         const idx = this.attendees.findIndex(a => a._id === this.editingId);
         if (idx !== -1) this.attendees[idx] = updated;
         this.editingId = null;
@@ -82,13 +77,12 @@ export class AttendeeListComponent implements OnInit {
     this.editData  = {};
   }
 
-  // Delete an attendee after confirmation
   deleteAttendee(a: attendee): void {
     if (!confirm(`Delete registration for ${a.name}? This cannot be undone.`)) return;
 
     this.svc.delete(a._id!).subscribe({
       next: () => {
-        // Remove from local array (no need to refetch the whole list)
+        // filter it out locally instead of refetching the whole list
         this.attendees = this.attendees.filter(x => x._id !== a._id);
       },
       error: (err) => {

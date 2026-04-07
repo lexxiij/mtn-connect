@@ -1,6 +1,4 @@
-// event-list/event-list.component.ts
-// Shows training events on a FullCalendar.
-// Events are now loaded from the backend API instead of being hardcoded.
+// shows training events on a calendar — pulls from the API
 
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -53,7 +51,7 @@ export class EventListComponent implements OnInit {
         this.calendarEvents = events.map((e) => ({
           id: e._id,
           title: e.title,
-          date: e.date ? new Date(e.date) : new Date(), // always a Date object
+          date: e.date ? new Date(e.date) : new Date(),
         }));
 
         this.calendarOptions = {
