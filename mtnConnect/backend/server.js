@@ -39,15 +39,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ── STATIC FILES ─────────────────────────────────────────────────────────────
-// Serve the built Angular app. This must come AFTER all /api routes so that
-// API calls are matched first, and only unmatched routes fall through to Angular.
-app.use(express.static(path.join(__dirname, '../dist/mtn-connect/browser')));
-
-// Catch-all: for any route that isn't an API route, send back index.html
-// so Angular's client-side router can handle it (e.g. /login, /events, etc.)
+// ── CATCH-ALL ─────────────────────────────────────────────────────────────────
+// The frontend is hosted separately on Netlify, so non-API routes just return
+// a simple message directing visitors to the right place.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/mtn-connect/browser/index.html'));
+  res.json({ message: 'MTN Connect API is running. Visit https://connect.meettheneedinc.org for the app.' });
 });
 
 // ── STARTUP ───────────────────────────────────────────────────────────────────
