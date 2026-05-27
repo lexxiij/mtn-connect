@@ -65,6 +65,15 @@
         </div>
 
         <div class="form-group">
+          <label for="registrationDeadline">
+            Register By Date <span class="optional">(optional)</span>
+          </label>
+          <input id="registrationDeadline" name="registrationDeadline" type="date"
+            [(ngModel)]="formData.registrationDeadline" />
+          <small class="field-hint">Registration closes after this date. Leave blank for no deadline.</small>
+        </div>
+
+        <div class="form-group">
           <label for="description">Description</label>
           <textarea id="description" name="description" rows="3"
             [(ngModel)]="formData.description"

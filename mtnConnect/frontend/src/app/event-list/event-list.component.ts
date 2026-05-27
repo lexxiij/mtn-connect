@@ -132,7 +132,9 @@ export class EventListComponent implements OnInit {
     this.showOrientationModal = false;
     this.selectedEvent = null;
 
-    if (trainingType === 'Shipyard Welding') {
+    // Case-insensitive check so minor casing differences in the admin form
+    // ("shipyard welding", "Shipyard welding", etc.) still route correctly.
+    if (trainingType.toLowerCase().includes('shipyard')) {
       this.router.navigate(['/shipyard-welding']);
     } else {
       this.router.navigate(['/register'], {

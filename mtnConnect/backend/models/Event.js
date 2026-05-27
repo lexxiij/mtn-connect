@@ -10,7 +10,8 @@ const eventSchema = new mongoose.Schema(
     time:        { type: String, default: '' },      // "HH:MM" 24-hour format, optional
     description: { type: String, default: '' },
     location:    { type: String, default: '' },
-    trainingType:{ type: String, default: '' },      // e.g. "CDL", "Forklift", "Shipyard Welding"
+    trainingType:        { type: String, default: '' },  // e.g. "CDL", "Forklift", "Shipyard Welding"
+    registrationDeadline:{ type: String, default: '' },  // "YYYY-MM-DD" — last day to register
   },
   {
     timestamps: true,

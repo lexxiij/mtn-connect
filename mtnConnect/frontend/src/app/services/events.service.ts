@@ -15,6 +15,7 @@ export interface TrainingEvent {
   description?: string;
   location?: string;
   trainingType?: string;
+  registrationDeadline?: string; // "YYYY-MM-DD" — last day to register
 }
 
 // payload type (no _id)

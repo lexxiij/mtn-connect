@@ -1,5 +1,30 @@
 <button class="btn-primary" routerLink="/">Back to Dashboard</button>
 
+<!-- ── Deadline loading state ── -->
+@if (checkingDeadline) {
+  <div class="form-container">
+    <p class="loading-msg">Loading registration details…</p>
+  </div>
+}
+
+<!-- ── Registration Closed banner ── -->
+@if (!checkingDeadline && registrationClosed) {
+  <div class="form-container">
+    <div class="closed-banner">
+      <div class="closed-icon">🔒</div>
+      <h2>Registration Is Closed</h2>
+      <p>
+        The registration deadline for this Shipyard Welding cohort has passed.
+        Please check back for future orientations, or contact MTN, Inc. directly
+        for more information.
+      </p>
+      <a class="btn-primary" routerLink="/">Return to Home</a>
+    </div>
+  </div>
+}
+
+<!-- ── Main form (only shown when open) ── -->
+@if (!checkingDeadline && !registrationClosed) {
 <div class="form-container">
   <h2>Shipyard Welding — Orientation Registration</h2>
 
@@ -194,11 +219,14 @@
     </button>
 
   </form>
+
+  @if (submitted && form.invalid) {
+    <p class="error">Please complete all required fields before submitting.</p>
+  }
+
 </div>
 
-@if (submitted && form.invalid) {
-  <p class="error">Please complete all required fields before submitting.</p>
-}
+} <!-- end @if (!checkingDeadline && !registrationClosed) -->
 
 <!-- ── Success Modal ── -->
 @if (success) {

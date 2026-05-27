@@ -2,11 +2,12 @@
 // Extends the standard registration with a full class schedule display
 // and a ranked shift-preference selector (Shifts A–D).
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminAttendeesService } from '../services/admin-attendees.service';
+import { EventsService } from '../services/events.service';
 
 // A simple type to keep shift data together
 interface ShiftOption {
@@ -21,7 +22,7 @@ interface ShiftOption {
   templateUrl: './shipyard-welding-register.component.html',
   styleUrls: ['./shipyard-welding-register.component.css'],
 })
-export class ShipyardWeldingRegisterComponent {
+export class ShipyardWeldingRegisterComponent implements OnInit {
 
   // ── Standard fields ────────────────────────────────────────────────────────
   fullName   = '';
@@ -41,10 +42,16 @@ export class ShipyardWeldingRegisterComponent {
   shiftError = '';
 
   // ── UI state ───────────────────────────────────────────────────────────────
-  submitted = false;
-  success   = false;
-  loading   = false;
-  errorMsg  = '';
+  submitted          = false;
+  success            = false;
+  loading            = false;
+  errorMsg           = '';
+
+  // ── Deadline check ─────────────────────────────────────────────────────────
+  // Set to true while we fetch events to check the deadline on load.
+  checkingDeadline   = true;
+  // Set to true if today is past the admin-set registrationDeadline.
+  registrationClosed = false;
 
   // ── Static data ────────────────────────────────────────────────────────────
   // readonly = this array never changes at runtime, which is good practice.
@@ -61,7 +68,42 @@ export class ShipyardWeldingRegisterComponent {
     'Saint Francois', 'Stoddard', 'Saint Genevieve',
   ];
 
-  constructor(private attendeesSvc: AdminAttendeesService) {}
+  constructor(
+    private attendeesSvc: AdminAttendeesService,
+    private eventsService: EventsService,
+  ) {}
+
+  // ── ngOnInit ──────────────────────────────────────────────────────────────
+  // Fetch events and check if registration for this Shipyard Welding cohort
+  // is still open. If the admin has set a registrationDeadline and today is
+  // past it, we lock the form and show a "Registration Closed" message.
+  ngOnInit(): void {
+    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+    this.eventsService.getAll().subscribe({
+      next: (events) => {
+        // Find Shipyard Welding events sorted soonest-first
+        const swEvents = events
+          .filter(e => e.trainingType?.toLowerCase().includes('shipyard'))
+          .sort((a, b) => a.date.localeCompare(b.date));
+
+        // Pick the most-relevant event: the next upcoming one, or the last one
+        // if all dates have passed (so the deadline still applies).
+        const target = swEvents.find(e => e.date >= today) ?? swEvents[swEvents.length - 1];
+
+        if (target?.registrationDeadline) {
+          // today > deadline  →  closed  (string comparison works for YYYY-MM-DD)
+          this.registrationClosed = today > target.registrationDeadline;
+        }
+
+        this.checkingDeadline = false;
+      },
+      error: () => {
+        // If events can't be loaded, fail open — still show the form.
+        this.checkingDeadline = false;
+      },
+    });
+  }
 
   // ── availableFor(slot) ────────────────────────────────────────────────────
   // Returns the shifts the user can still pick for a given rank slot by
