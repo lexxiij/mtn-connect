@@ -11,9 +11,14 @@ const express = require('express');
 const router  = express.Router();
 const Stripe  = require('stripe');
 
-// Initialise Stripe with your secret key from .env
-// NEVER put the real secret key in code — always use an environment variable
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+// Stripe is initialised lazily inside the route handler so the server
+// can start without a key — donations simply won't work until the key is added
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY is not set. Add it in Render environment variables.');
+  }
+  return Stripe(process.env.STRIPE_SECRET_KEY);
+};
 
 // The URL of our deployed frontend — used for Stripe's success/cancel redirects
 // Falls back to localhost:4200 during local development
@@ -35,6 +40,7 @@ router.post('/create-checkout-session', async (req, res) => {
 
     // Create a Stripe Checkout Session
     // Stripe hosts the payment page — we never touch card details
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',   // one-time payment (use 'subscription' for recurring)
