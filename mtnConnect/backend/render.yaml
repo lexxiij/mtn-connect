@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mtnconnect-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000          # Render's default port
+      - key: STRIPE_SECRET_KEY
+        sync: false           # Enter this in Render dashboard — never commit keys
+      - key: FRONTEND_URL
+        sync: false           # e.g. https://your-mtn-website.netlify.app
+      - key: MONGODB_URI
+        sync: false           # Your MongoDB Atlas connection string

@@ -1,10 +1,12 @@
-// shows training events on a calendar — pulls from the API
+// event-list/event-list.component.ts
+// Shows training events on a FullCalendar.
+// Events are now loaded from the backend API instead of being hardcoded.
 
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventInput } from '@fullcalendar/core';
+import { CalendarOptions, EventInput, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EventsService, TrainingEvent } from '../services/events.service';
@@ -21,11 +23,16 @@ export class EventListComponent implements OnInit {
   loading = false;
   errorMsg = '';
 
+  // Modal state
+  showOrientationModal = false;
+  // Holds the event that was clicked so the modal can show its title
+  // and the Register Now button knows which route to go to
+  selectedEvent: EventInput | null = null;
+
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
-    height: '90%',
-    contentHeight: 'auto',
-    aspectRatio: 1,
+    height: '100%',
+    fixedWeekCount: false,
     headerToolbar: {
       left: 'prev',
       center: 'title',
@@ -33,10 +40,12 @@ export class EventListComponent implements OnInit {
     },
     plugins: [dayGridPlugin, interactionPlugin],
     dateClick: (arg) => this.handleDateClick(arg),
+    // eventClick fires when the user clicks an event tile on the calendar itself
+    eventClick: (arg) => this.handleEventClick(arg),
     events: [],
   };
 
-  constructor(private eventsService: EventsService) {}
+  constructor(private eventsService: EventsService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadEvents();
@@ -48,10 +57,19 @@ export class EventListComponent implements OnInit {
       next: (events: TrainingEvent[]) => {
         console.log('Events from API:', events);
 
-        this.calendarEvents = events.map((e) => ({
+        // Only show today's events and future events.
+        // Dates are stored as "YYYY-MM-DD" strings, so string comparison
+        // works correctly — lexicographic order matches chronological order.
+        const today = new Date().toISOString().split('T')[0]; // e.g. "2026-05-26"
+        const upcomingEvents = events.filter(e => e.date >= today);
+
+        this.calendarEvents = upcomingEvents.map((e) => ({
           id: e._id,
           title: e.title,
           date: e.date ? new Date(e.date) : new Date(),
+          // extendedProps is FullCalendar's way of storing custom data on an event.
+          // We stash trainingType here so our click handler can read it later.
+          extendedProps: { trainingType: e.trainingType },
         }));
 
         this.calendarOptions = {
@@ -79,7 +97,48 @@ export class EventListComponent implements OnInit {
 
   handleDateClick(arg: DateClickArg) {
     console.log('Date clicked:', arg.dateStr);
-    // TODO: pre-fill registration form for this date
+  }
+
+  // Called when the user clicks an event tile directly on the calendar grid.
+  // arg.event gives us the FullCalendar event object, including extendedProps.
+  handleEventClick(arg: EventClickArg): void {
+    this.navigateToRegister({
+      id:            arg.event.id,
+      title:         arg.event.title,
+      extendedProps: arg.event.extendedProps,
+    });
+  }
+
+  // All events now open the info modal first so users see the time,
+  // location, and what to bring before they register.
+  navigateToRegister(event: EventInput): void {
+    this.selectedEvent = event;
+    this.showOrientationModal = true;
+  }
+
+  closeModal(): void {
+    this.showOrientationModal = false;
+    this.selectedEvent = null;
+  }
+
+  // Called when the user clicks "Register Now" inside the modal.
+  // Routes to the right form based on the event's trainingType.
+  registerFromModal(): void {
+    // Capture what we need BEFORE clearing selectedEvent
+    const trainingType = this.selectedEvent?.extendedProps?.['trainingType'] ?? '';
+    const eventId      = this.selectedEvent?.id;
+    const eventTitle   = this.selectedEvent?.title;
+
+    this.showOrientationModal = false;
+    this.selectedEvent = null;
+
+    if (trainingType === 'Shipyard Welding') {
+      this.router.navigate(['/shipyard-welding']);
+    } else {
+      this.router.navigate(['/register'], {
+        queryParams: { eventId, eventTitle },
+      });
+    }
   }
 
   trackById(index: number, event: EventInput) {

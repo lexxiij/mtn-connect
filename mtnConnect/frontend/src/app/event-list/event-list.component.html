@@ -28,8 +28,7 @@
         </div>
         <button
           class="btn-primary"
-          [routerLink]="['/register']"
-          [queryParams]="{ eventId: event.id, eventTitle: event.title }"
+          (click)="navigateToRegister(event)"
         >
           Register Now!
         </button>
@@ -45,3 +44,52 @@
   </div>
 
 </div>
+
+<!-- ── Orientation Info Modal (universal for all event types) ── -->
+@if (showOrientationModal && selectedEvent) {
+  <!-- Dark overlay — clicking it closes the popup -->
+  <div class="modal-overlay" (click)="closeModal()"></div>
+
+  <div class="modal-box" role="dialog" aria-modal="true">
+
+    <div class="modal-header">
+      <h2>{{ selectedEvent.title }}</h2>
+      <button class="modal-close" (click)="closeModal()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-detail-row">
+        <span class="modal-icon">🕐</span>
+        <div>
+          <span class="modal-label">Time</span>
+          <span>1:00 PM – 3:00 PM</span>
+        </div>
+      </div>
+
+      <div class="modal-detail-row">
+        <span class="modal-icon">📍</span>
+        <div>
+          <span class="modal-label">Location</span>
+          <span>700 W Marshall St, Charleston, MO 63834</span>
+        </div>
+      </div>
+
+      <div class="modal-bring">
+        <span class="modal-label">Please Bring the Following</span>
+        <ul>
+          <li>Photo ID</li>
+          <li>Social Security Card</li>
+          <li>Birth Certificate</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-primary" (click)="registerFromModal()">Register Now</button>
+      <button class="btn-secondary" (click)="closeModal()">Close</button>
+    </div>
+
+  </div>
+}

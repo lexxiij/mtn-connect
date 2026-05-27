@@ -1,6 +1,6 @@
 <header class="site-header">
   <div class="logo">
-    <h1>MTN,Inc.</h1>
+    <img src="mtn-logo.png" alt="Meet The Need, Inc." class="logo-img" />
   </div>
   <nav class="nav-links">
     <a routerLink="/home" class="nav-button">Home</a>
@@ -10,30 +10,86 @@
   </nav>
 </header>
 
-<div class="calendar-container">
-  <full-calendar [options]="calendarOptions"></full-calendar>
+<div class="events-layout">
+
+  <!-- LEFT: Upcoming Events list -->
+  <div class="container">
+    <h2>Upcoming Events</h2>
+
+    <div *ngIf="loading">Loading events...</div>
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+    <ul *ngIf="calendarEvents.length > 0">
+      <li *ngFor="let event of calendarEvents; trackBy: trackById">
+        <div class="event-info">
+          <strong>{{ event.title }}</strong>
+          <span>{{ event.date ? ($any(event.date) | date: 'fullDate') : 'TBD' }}
+          {{ $any(event).time ? 'at ' + $any(event).time : '' }}</span>
+        </div>
+        <button
+          class="btn-primary"
+          (click)="navigateToRegister(event)"
+        >
+          Register Now!
+        </button>
+      </li>
+    </ul>
+
+    <p *ngIf="calendarEvents.length === 0 && !loading">No upcoming events.</p>
+  </div>
+
+  <!-- RIGHT: Calendar -->
+  <div class="calendar-container">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
 </div>
 
-<div class="container">
-  <h2>Upcoming Events</h2>
+<!-- ── Orientation Info Modal (universal for all event types) ── -->
+@if (showOrientationModal && selectedEvent) {
+  <!-- Dark overlay — clicking it closes the popup -->
+  <div class="modal-overlay" (click)="closeModal()"></div>
 
-  <div *ngIf="loading">Loading events...</div>
-  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+  <div class="modal-box" role="dialog" aria-modal="true">
 
-  <ul *ngIf="calendarEvents.length > 0">
-    <li *ngFor="let event of calendarEvents; trackBy: trackById">
-      <strong>{{ event.title }}</strong> -
-      {{ event.date ? ($any(event.date) | date: 'fullDate') : 'TBD' }}
-      {{ $any(event).time ? 'at ' + $any(event).time : '' }}
-      <button
-        class="btn-primary"
-        [routerLink]="['/register']"
-        [queryParams]="{ eventId: event.id, eventTitle: event.title }"
-      >
-        Register Now!
-      </button>
-    </li>
-  </ul>
+    <div class="modal-header">
+      <h2>{{ selectedEvent.title }}</h2>
+      <button class="modal-close" (click)="closeModal()" aria-label="Close">✕</button>
+    </div>
 
-  <p *ngIf="calendarEvents.length === 0 && !loading">No upcoming events.</p>
-</div>
+    <div class="modal-body">
+
+      <div class="modal-detail-row">
+        <span class="modal-icon">🕐</span>
+        <div>
+          <span class="modal-label">Time</span>
+          <span>1:00 PM – 3:00 PM</span>
+        </div>
+      </div>
+
+      <div class="modal-detail-row">
+        <span class="modal-icon">📍</span>
+        <div>
+          <span class="modal-label">Location</span>
+          <span>700 W Marshall St, Charleston, MO 63834</span>
+        </div>
+      </div>
+
+      <div class="modal-bring">
+        <span class="modal-label">Please Bring the Following</span>
+        <ul>
+          <li>Photo ID</li>
+          <li>Social Security Card</li>
+          <li>Birth Certificate</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-primary" (click)="registerFromModal()">Register Now</button>
+      <button class="btn-secondary" (click)="closeModal()">Close</button>
+    </div>
+
+  </div>
+}

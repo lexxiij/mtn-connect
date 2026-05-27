@@ -9,14 +9,16 @@ import { AdminEventsComponent } from './admin-events/admin-events.component';
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { ShipyardWeldingRegisterComponent } from './shipyard-welding-register/shipyard-welding-register.component';
 
 export const routes: Routes = [
-  { path: '',         component: HomeComponent, pathMatch: 'full' },
-  { path: 'home',     component: HomeComponent },
-  { path: 'events',   component: EventListComponent },
-  { path: 'register', component: RegistrationFormComponent },
-  { path: 'contact',  component: ContactComponent },
-  { path: 'login',    component: LoginComponent },
+  { path: '',                 component: HomeComponent, pathMatch: 'full' },
+  { path: 'home',             component: HomeComponent },
+  { path: 'events',           component: EventListComponent },
+  { path: 'register',         component: RegistrationFormComponent },
+  { path: 'shipyard-welding', component: ShipyardWeldingRegisterComponent },
+  { path: 'contact',          component: ContactComponent },
+  { path: 'login',            component: LoginComponent },
 
   // admin only
   { path: 'attendees',    component: AttendeeListComponent,  canActivate: [authGuard] },

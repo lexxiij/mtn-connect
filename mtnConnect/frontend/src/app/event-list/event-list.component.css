@@ -118,6 +118,177 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* ── Orientation Modal ─────────────────────────────────────── */
+
+/* Semi-transparent dark layer that sits behind the modal box.
+   position: fixed means it covers the WHOLE screen regardless of scroll. */
+.modal-overlay {
+  position: fixed;
+  inset: 0;                        /* shorthand for top/right/bottom/left: 0 */
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  cursor: pointer;
+}
+
+/* The white card that floats in the center of the screen */
+.modal-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* perfectly centers the box */
+  z-index: 101;                     /* sits above the overlay */
+  width: 90%;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s ease, color 0.15s ease;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Each detail row: icon + label + value */
+.modal-detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.modal-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.modal-detail-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+/* "Please Bring" section */
+.modal-bring {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-bring ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-bring ul li {
+  font-size: 0.875rem;
+  color: #92400e;
+  font-weight: 500;
+  padding-left: 16px;
+  position: relative;
+}
+
+.modal-bring ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #d97706;
+  font-weight: 700;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.modal-footer .btn-primary,
+.modal-footer .btn-secondary {
+  flex: 1;
+  padding: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.modal-footer .btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.modal-footer .btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.modal-footer .btn-secondary {
+  background: var(--bg);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+
+.modal-footer .btn-secondary:hover {
+  background: var(--border);
+}
+
 /* ── Mobile: stack vertically ──────────────────────────────── */
 @media (max-width: 768px) {
   .events-layout {

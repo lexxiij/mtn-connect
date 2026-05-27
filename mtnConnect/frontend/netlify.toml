@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build -- --configuration production"
+  publish = "dist/mtn-connect/browser"
+
+# Serves index.html for any route so Angular's router works on refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
