@@ -18,8 +18,25 @@ const PORT = process.env.PORT || 3000;
 // ── MIDDLEWARE ────────────────────────────────────────────────────────────────
 // cors() allows our Angular app (running on a different port/domain) to call this API.
 // Without CORS the browser would block cross-origin requests for security reasons.
+const allowedOrigins = [
+  'https://meettheneedinc.org',
+  'https://www.meettheneedinc.org',
+  'https://connect.meettheneedinc.org',
+  'https://mtninc.netlify.app',
+  'https://mtnconnect.netlify.app',
+  'http://localhost:4200',
+  'http://localhost:4201',
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*', // In production, set FRONTEND_URL to your Netlify URL
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked: ${origin}`));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
