@@ -105,6 +105,28 @@
   width: 58px;
 }
 
+/* ── "or" divider between schedule sections ── */
+.or-divider {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--border);
+}
+
+.or-divider::before { margin-right: 10px; }
+.or-divider::after  { margin-left:  10px; }
+
 /* ── Form Layout (matches existing register-form.component.css) ── */
 form {
   width: 100%;

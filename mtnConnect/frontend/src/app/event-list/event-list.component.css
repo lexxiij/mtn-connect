@@ -63,8 +63,8 @@
 
 .container ul li {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   padding: 14px 16px;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -72,7 +72,7 @@
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   color: var(--text);
-  gap: 12px;
+  gap: 10px;
 }
 
 /* Event title + date stacked vertically */
@@ -93,12 +93,14 @@
   color: var(--text-muted);
 }
 
-/* Register button */
+/* Register button — full width below the event info */
 .container ul .btn-primary {
-  white-space: nowrap;
-  padding: 7px 14px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 14px;
   font-size: 0.82rem;
-  flex-shrink: 0;
+  text-align: center;
 }
 
 /* Empty state */

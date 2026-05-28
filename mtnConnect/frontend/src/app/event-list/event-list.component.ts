@@ -66,7 +66,7 @@ export class EventListComponent implements OnInit {
         this.calendarEvents = upcomingEvents.map((e) => ({
           id: e._id,
           title: e.title,
-          date: e.date ? new Date(e.date + 'T12:00:00') : new Date(),
+          date: e.date ?? new Date().toISOString().split('T')[0],
           // extendedProps is FullCalendar's way of storing custom data on an event.
           // We stash trainingType here so our click handler can read it later.
           extendedProps: { trainingType: e.trainingType },
@@ -83,8 +83,8 @@ export class EventListComponent implements OnInit {
         this.errorMsg =
           'Could not load events from server. Showing sample events.';
         this.calendarEvents = [
-          { id: '1', title: 'Forklift Training Orientation', date: new Date('2026-05-17') },
-          { id: '2', title: 'CDL Training Orientation', date: new Date('2026-05-18') },
+          { id: '1', title: 'Forklift Training Orientation', date: '2026-05-17' },
+          { id: '2', title: 'CDL Training Orientation', date: '2026-05-18' },
         ];
         this.calendarOptions = {
           ...this.calendarOptions,
