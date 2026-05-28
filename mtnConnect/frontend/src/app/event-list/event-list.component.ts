@@ -66,7 +66,7 @@ export class EventListComponent implements OnInit {
         this.calendarEvents = upcomingEvents.map((e) => ({
           id: e._id,
           title: e.title,
-          date: e.date ? new Date(e.date) : new Date(),
+          date: e.date ? new Date(e.date + 'T12:00:00') : new Date(),
           // extendedProps is FullCalendar's way of storing custom data on an event.
           // We stash trainingType here so our click handler can read it later.
           extendedProps: { trainingType: e.trainingType },

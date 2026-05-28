@@ -1,0 +1,19 @@
+# Mac system files
+.DS_Store
+**/.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Angular build output
+dist/
+
+# Environment files with secrets — never commit these
+.env
+.env.*
+mtnConnect/backend/.env
+
+# Editor folders
+.vscode/
+.idea/
