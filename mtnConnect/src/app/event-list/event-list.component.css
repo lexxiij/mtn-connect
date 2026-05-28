@@ -93,9 +93,12 @@
   color: var(--text-muted);
 }
 
-/* Register button — full width below the event info */
+/* Register button — full width below the event info.
+   display: block overrides the global inline-flex so width: 100% works. */
 .container ul .btn-primary {
+  display: block;
   width: 100%;
+  box-sizing: border-box;
   padding: 8px 14px;
   font-size: 0.82rem;
   text-align: center;
