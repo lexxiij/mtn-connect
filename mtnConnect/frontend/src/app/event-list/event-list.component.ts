@@ -69,7 +69,7 @@ export class EventListComponent implements OnInit {
           date: e.date ?? new Date().toISOString().split('T')[0],
           // extendedProps is FullCalendar's way of storing custom data on an event.
           // We stash trainingType here so our click handler can read it later.
-          extendedProps: { trainingType: e.trainingType, description: e.description },
+          extendedProps: { trainingType: e.trainingType, description: e.description, time: e.time },
         }));
 
         this.calendarOptions = {
@@ -145,5 +145,15 @@ export class EventListComponent implements OnInit {
 
   trackById(index: number, event: EventInput) {
     return event.id;
+  }
+
+  // Converts "HH:MM" (24-hour) from the admin form into "H:MM AM/PM" for display.
+  // Returns null if no time was set so the template can show a fallback.
+  formatTime(raw: string | undefined): string | null {
+    if (!raw) return null;
+    const [h, m] = raw.split(':').map(Number);
+    const period = h >= 12 ? 'PM' : 'AM';
+    const hour   = h % 12 || 12;
+    return `${hour}:${String(m).padStart(2, '0')} ${period}`;
   }
 }

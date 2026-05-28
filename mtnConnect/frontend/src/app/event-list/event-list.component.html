@@ -63,7 +63,7 @@
         <span class="modal-icon">🕐</span>
         <div>
           <span class="modal-label">Time</span>
-          <span>1:00 PM – 3:00 PM</span>
+          <span>{{ formatTime(selectedEvent.extendedProps?.['time']) ?? 'See event details' }}</span>
         </div>
       </div>
 
