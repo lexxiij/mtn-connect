@@ -216,6 +216,21 @@
   color: var(--text-muted);
 }
 
+/* Description section */
+.modal-description {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.modal-description p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
 /* "Please Bring" section */
 .modal-bring {
   background: #fef3c7;

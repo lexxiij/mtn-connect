@@ -75,6 +75,13 @@
         </div>
       </div>
 
+      @if (selectedEvent.extendedProps?.['description']) {
+        <div class="modal-description">
+          <span class="modal-label">About This Event</span>
+          <p>{{ selectedEvent.extendedProps?.['description'] }}</p>
+        </div>
+      }
+
       <div class="modal-bring">
         <span class="modal-label">Please Bring the Following</span>
 
