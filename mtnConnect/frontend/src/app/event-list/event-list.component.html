@@ -77,11 +77,23 @@
 
       <div class="modal-bring">
         <span class="modal-label">Please Bring the Following</span>
-        <ul>
-          <li>Photo ID</li>
-          <li>Social Security Card</li>
-          <li>Birth Certificate</li>
-        </ul>
+
+        <!-- CDL events need a driver's license and MVR instead of a generic photo ID -->
+        @if (selectedEvent.extendedProps?.['trainingType']?.toLowerCase().includes('cdl')) {
+          <ul>
+            <li>Missouri Driver's License</li>
+            <li>Motor Vehicle Record</li>
+            <li>Social Security Card</li>
+            <li>Birth Certificate</li>
+          </ul>
+        } @else {
+          <ul>
+            <li>Photo ID</li>
+            <li>Social Security Card</li>
+            <li>Birth Certificate</li>
+          </ul>
+        }
+
       </div>
 
     </div>
