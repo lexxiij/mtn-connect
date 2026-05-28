@@ -45,6 +45,48 @@
 
 </div>
 
+<!-- ── Program Flyers ── -->
+<div class="flyers-section">
+  <h2>Program Flyers</h2>
+  <p class="flyers-subtitle">Click a flyer to open the full PDF, or view it below.</p>
+
+  <div class="flyers-grid">
+
+    <div class="flyer-card">
+      <div class="flyer-header">
+        <h3>CDL &amp; Forklift Training</h3>
+        <a href="WSTEPFLYER.pdf" target="_blank" class="btn-secondary flyer-link">Open PDF ↗</a>
+      </div>
+      <iframe
+        src="WSTEPFLYER.pdf"
+        title="WSTEP CDL & Forklift Training Flyer"
+        class="flyer-embed"
+        loading="lazy">
+        <p>Your browser can't display PDFs.
+          <a href="WSTEPFLYER.pdf" target="_blank">Download the flyer here.</a>
+        </p>
+      </iframe>
+    </div>
+
+    <div class="flyer-card">
+      <div class="flyer-header">
+        <h3>Shipyard Welding Training</h3>
+        <a href="WSTEPWELDING.pdf" target="_blank" class="btn-secondary flyer-link">Open PDF ↗</a>
+      </div>
+      <iframe
+        src="WSTEPWELDING.pdf"
+        title="WSTEP Shipyard Welding Training Flyer"
+        class="flyer-embed"
+        loading="lazy">
+        <p>Your browser can't display PDFs.
+          <a href="WSTEPWELDING.pdf" target="_blank">Download the flyer here.</a>
+        </p>
+      </iframe>
+    </div>
+
+  </div>
+</div>
+
 <!-- ── Orientation Info Modal (universal for all event types) ── -->
 @if (showOrientationModal && selectedEvent) {
   <!-- Dark overlay — clicking it closes the popup -->
@@ -63,7 +105,12 @@
         <span class="modal-icon">🕐</span>
         <div>
           <span class="modal-label">Time</span>
-          <span>{{ formatTime(selectedEvent.extendedProps?.['time']) ?? 'See event details' }}</span>
+          <span>
+            {{ formatTime(selectedEvent.extendedProps?.['time']) ?? 'See event details' }}
+            @if (selectedEvent.extendedProps?.['endTime']) {
+              – {{ formatTime(selectedEvent.extendedProps?.['endTime']) }}
+            }
+          </span>
         </div>
       </div>
 
