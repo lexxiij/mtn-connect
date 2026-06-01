@@ -1,3 +1,12 @@
+/* Shift / comments column — constrain width so it wraps rather than stretching */
+.comments-cell {
+  max-width: 260px;
+  white-space: pre-wrap;  /* preserves the newline between shift summary and extra comments */
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
 /*Back button area*/
 .admin-back {
   padding: 24px 32px 0;
@@ -5,7 +14,7 @@
 
 /*Main Admin Panel*/
 .container {
-  max-width: 860px;
+  max-width: 1200px;
   margin: 32px auto 60px;
   padding: 40px;
   background: var(--surface);

@@ -35,6 +35,7 @@
             <th>County</th>
             <th>Training</th>
             <th>Heard From</th>
+            <th>Shift Preferences / Notes</th>
             <th>Registered</th>
             <th>Actions</th>
           </tr>
@@ -51,6 +52,7 @@
                 <td>{{ a.county }}</td>
                 <td>{{ a.trainingType }}</td>
                 <td>{{ a.heardFrom }}</td>
+                <td class="comments-cell">{{ a.comments || '—' }}</td>
                 <td>{{ a.createdAt | date:'shortDate' }}</td>
                 <td>
                   <button class="btn-edit" (click)="startEdit(a)">Edit</button>
