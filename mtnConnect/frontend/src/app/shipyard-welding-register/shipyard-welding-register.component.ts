@@ -28,6 +28,7 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
   fullName   = '';
   email      = '';
   phone      = '';
+  address    = '';
   dob        = '';
   county     = '';
   heardFrom  = '';
@@ -179,6 +180,7 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
       name:         this.fullName,
       email:        this.email,
       phone:        this.phone,
+      address:      this.address,
       dob:          this.dob,
       education:    '',
       county:       this.county,

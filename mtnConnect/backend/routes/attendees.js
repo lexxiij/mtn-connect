@@ -19,6 +19,19 @@ const router = express.Router();
 // Anyone can submit a registration form.
 router.post('/', async (req, res) => {
   try {
+    // Block duplicate registrations by phone number.
+    // Strip all non-digits so "573-233-2980" matches "5732332980".
+    const incomingPhone = (req.body.phone || '').replace(/\D/g, '');
+
+    if (incomingPhone) {
+      const existing = await Attendee.findOne({ phone: new RegExp(incomingPhone) });
+      if (existing) {
+        return res.status(409).json({
+          message: `This phone number is already registered for ${existing.trainingType}. You may only attend one training.`
+        });
+      }
+    }
+
     // req.body contains the JSON sent from the Angular form
     const attendee = new Attendee(req.body);
 

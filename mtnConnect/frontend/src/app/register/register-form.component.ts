@@ -15,6 +15,7 @@ export class RegistrationFormComponent {
   fullName     = '';
   email        = '';
   phone        = '';
+  address      = '';
   dob          = '';
   education    = '';
   county       = '';
@@ -49,6 +50,7 @@ export class RegistrationFormComponent {
       name:         this.fullName,
       email:        this.email,
       phone:        this.phone,
+      address:      this.address,
       dob:          this.dob,
       education:    this.education,
       county:       this.county,

@@ -12,6 +12,7 @@ const attendeeSchema = new mongoose.Schema(
     education:    { type: String, default: '' },
     county:       { type: String, required: true },
     phone:        { type: String, default: '' },
+    address:      { type: String, default: '' },
     trainingType: { type: String, required: true },
     heardFrom:    { type: String, required: true },
     heardOther:   { type: String, default: '' },
