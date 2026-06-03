@@ -66,7 +66,7 @@ export class AdminEventsComponent implements OnInit {
   // Open a blank form to add a new event
   openAddForm(): void {
     this.editingId = null;
-    this.formData = { title: '', date: '', time: '', description: '', location: '', trainingType: '', registrationDeadline: '' };
+    this.formData = { title: '', date: '', time: '', endTime: '', description: '', location: '', trainingType: '', registrationDeadline: '' };
     this.showForm = true;
     this.errorMsg = '';
     this.successMsg = '';
@@ -79,6 +79,7 @@ export class AdminEventsComponent implements OnInit {
       title: event.title,
       date: event.date,
       time: event.time || '',
+      endTime: event.endTime || '',
       description: event.description || '',
       location: event.location || '',
       trainingType: event.trainingType || '',

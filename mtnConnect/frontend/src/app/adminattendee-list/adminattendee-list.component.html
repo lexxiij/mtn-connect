@@ -4,6 +4,7 @@
     <div class="header-actions">
       <a routerLink="/home" class="btn-home">Home</a>
       <a routerLink="/admin-events" class="btn-manage-events">Manage Events</a>
+      <button class="btn-export" (click)="exportCSV()">Export CSV</button>
       <button class="btn-logout" (click)="logout()">Log Out</button>
     </div>
   </div>
@@ -32,6 +33,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>Address</th>
             <th>County</th>
             <th>Training</th>
             <th>Heard From</th>
@@ -49,6 +51,7 @@
                 <td>{{ a.name }}</td>
                 <td>{{ a.email }}</td>
                 <td>{{ a.phone }}</td>
+                <td>{{ a.address || '—' }}</td>
                 <td>{{ a.county }}</td>
                 <td>{{ a.trainingType }}</td>
                 <td>{{ a.heardFrom }}</td>
@@ -67,6 +70,7 @@
                 <td><input [(ngModel)]="editData.name"         [name]="'edit_name_' + a._id"  /></td>
                 <td><input [(ngModel)]="editData.email"        [name]="'edit_email_' + a._id" type="email" /></td>
                 <td><input [(ngModel)]="editData.phone"        [name]="'edit_phone_' + a._id" /></td>
+                <td><input [(ngModel)]="editData.address"      [name]="'edit_addr_' + a._id"  /></td>
                 <td><input [(ngModel)]="editData.county"       [name]="'edit_county_' + a._id" /></td>
                 <td><input [(ngModel)]="editData.trainingType" [name]="'edit_type_' + a._id"  /></td>
                 <td><input [(ngModel)]="editData.heardFrom"    [name]="'edit_heard_' + a._id" /></td>

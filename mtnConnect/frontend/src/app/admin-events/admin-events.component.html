@@ -44,9 +44,14 @@
               [(ngModel)]="formData.date" required />
           </div>
           <div class="form-group">
-            <label for="time">Time <span class="optional">(optional)</span></label>
+            <label for="time">Start Time <span class="optional">(optional)</span></label>
             <input id="time" name="time" type="time"
               [(ngModel)]="formData.time" />
+          </div>
+          <div class="form-group">
+            <label for="endTime">End Time <span class="optional">(optional)</span></label>
+            <input id="endTime" name="endTime" type="time"
+              [(ngModel)]="formData.endTime" />
           </div>
         </div>
 

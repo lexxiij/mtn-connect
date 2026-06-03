@@ -11,7 +11,8 @@ export interface TrainingEvent {
   _id: string;
   title: string;
   date: string;
-  time?: string;        // "HH:MM" — optional, shown alongside the date
+  time?: string;        // "HH:MM" start time — optional
+  endTime?: string;     // "HH:MM" end time — optional
   description?: string;
   location?: string;
   trainingType?: string;

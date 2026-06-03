@@ -69,7 +69,7 @@ export class EventListComponent implements OnInit {
           date: e.date ?? new Date().toISOString().split('T')[0],
           // extendedProps is FullCalendar's way of storing custom data on an event.
           // We stash trainingType here so our click handler can read it later.
-          extendedProps: { trainingType: e.trainingType, description: e.description, time: e.time },
+          extendedProps: { trainingType: e.trainingType, description: e.description, time: e.time, endTime: e.endTime },
         }));
 
         this.calendarOptions = {

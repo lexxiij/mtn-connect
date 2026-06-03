@@ -98,4 +98,56 @@ export class AttendeeListComponent implements OnInit {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
+
+  // ── CSV Export ──────────────────────────────────────────────────────────────
+  // Groups attendees by trainingType, writes a CSV section for each, and
+  // triggers a file download in the browser — no backend needed.
+  exportCSV(): void {
+    const headers = ['Name', 'Email', 'Phone', 'Address', 'Date of Birth', 'County',
+                     'Training Type', 'Heard From', 'Heard Other', 'Comments', 'Registered'];
+
+    // Helper: wrap a value in quotes and escape any internal quotes
+    const escape = (val: any): string => {
+      const str = val == null ? '' : String(val);
+      return `"${str.replace(/"/g, '""')}"`;
+    };
+
+    // Group attendees by trainingType
+    const groups: { [type: string]: attendee[] } = {};
+    for (const a of this.attendees) {
+      const key = a.trainingType || 'Uncategorized';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(a);
+    }
+
+    const rows: string[] = [];
+
+    for (const [trainingType, members] of Object.entries(groups)) {
+      // Section header — bold label row (capitalised training type)
+      rows.push(`"=== ${trainingType} ==="`);
+      rows.push(headers.map(escape).join(','));
+
+      for (const a of members) {
+        const registered = a.createdAt ? new Date(a.createdAt).toLocaleDateString() : '';
+        rows.push([
+          a.name, a.email, a.phone, a.address, a.dob,
+          a.county, a.trainingType, a.heardFrom, a.heardOther,
+          a.comments, registered
+        ].map(escape).join(','));
+      }
+
+      // Blank line between sections
+      rows.push('');
+    }
+
+    const csvContent = rows.join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href     = url;
+    link.download = `attendees-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
 }

@@ -6,6 +6,7 @@ export interface attendee {
   education: string;
   county: string;
   phone?: string;
+  address?: string;
   trainingType: string;
   heardFrom: string;
   heardOther: string;
