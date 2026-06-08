@@ -47,6 +47,7 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
   success            = false;
   loading            = false;
   errorMsg           = '';
+  addressError       = '';
 
   // ── Deadline check ─────────────────────────────────────────────────────────
   // Set to true while we fetch events to check the deadline on load.
@@ -140,13 +141,24 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
 
   // ── submit(form) ──────────────────────────────────────────────────────────
   submit(form: NgForm): void {
-    this.submitted  = true;
-    this.shiftError = '';
-    this.errorMsg   = '';
-    this.success    = false;
+    this.submitted    = true;
+    this.shiftError   = '';
+    this.errorMsg     = '';
+    this.addressError = '';
+    this.success      = false;
 
     // Check standard form fields first so those errors show properly
     if (form.invalid) return;
+
+    // Require a 5-digit ZIP somewhere in the address string.
+    if (!this.address.trim()) {
+      this.addressError = 'Address is required.';
+      return;
+    }
+    if (!/\d{5}/.test(this.address)) {
+      this.addressError = 'Please include your full address: Street, City, State, and ZIP code.';
+      return;
+    }
 
     // Check top 3 shift slots are filled
     const chosen = [this.shift1, this.shift2, this.shift3];

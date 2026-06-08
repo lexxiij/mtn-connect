@@ -28,6 +28,7 @@ export class RegistrationFormComponent {
   loading          = false;
   errorMsg         = '';
   submittedType    = '';
+  addressError     = '';
 
   public missouriCounties: string[] = [
     'Mississippi', 'Scott', 'New Madrid', 'Pemiscot', 'Butler',
@@ -38,11 +39,23 @@ export class RegistrationFormComponent {
   constructor(private attendeesSvc: AdminAttendeesService) {}
 
   submit(form: NgForm) {
-    this.submitted = true;
-    this.success   = false;
-    this.errorMsg  = '';
+    this.submitted    = true;
+    this.success      = false;
+    this.errorMsg     = '';
+    this.addressError = '';
 
     if (form.invalid) return;
+
+    // Require a 5-digit ZIP somewhere in the address string.
+    // This is a simple way to confirm the person included city, state, and zip.
+    if (!this.address.trim()) {
+      this.addressError = 'Address is required.';
+      return;
+    }
+    if (!/\d{5}/.test(this.address)) {
+      this.addressError = 'Please include your full address: Street, City, State, and ZIP code.';
+      return;
+    }
 
     this.loading = true;
 
