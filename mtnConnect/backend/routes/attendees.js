@@ -20,17 +20,33 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   try {
     // Block duplicate registrations by phone number.
-    // Strip all non-digits so "573-233-2980" matches "5732332980".
+    // We normalize BOTH sides to digits-only before comparing so that
+    // "573-233-2980", "(573) 233-2980", and "5732332980" all match each other.
     const incomingPhone = (req.body.phone || '').replace(/\D/g, '');
 
     if (incomingPhone) {
-      const existing = await Attendee.findOne({ phone: new RegExp(incomingPhone) });
-      if (existing) {
+      // Fetch all attendees that have a phone on file, then compare in JS
+      // after stripping formatting from both sides.  This handles existing
+      // records stored in any format (dashes, spaces, parens, etc.).
+      const allWithPhone = await Attendee.find(
+        { phone: { $exists: true, $ne: '' } },
+        'phone trainingType'          // only fetch the two fields we need
+      );
+
+      const duplicate = allWithPhone.find(
+        a => (a.phone || '').replace(/\D/g, '') === incomingPhone
+      );
+
+      if (duplicate) {
         return res.status(409).json({
-          message: `This phone number is already registered for ${existing.trainingType}. You may only attend one training.`
+          message: `This phone number is already registered for ${duplicate.trainingType}. You may only attend one training.`
         });
       }
     }
+
+    // Normalize the phone to digits-only before saving so future lookups
+    // always compare apples to apples.
+    if (incomingPhone) req.body.phone = incomingPhone;
 
     // req.body contains the JSON sent from the Angular form
     const attendee = new Attendee(req.body);
