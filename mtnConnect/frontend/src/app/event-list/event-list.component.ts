@@ -57,11 +57,18 @@ export class EventListComponent implements OnInit {
       next: (events: TrainingEvent[]) => {
         console.log('Events from API:', events);
 
-        // Only show today's events and future events.
-        // Dates are stored as "YYYY-MM-DD" strings, so string comparison
+        // Only show events that are:
+        //   1. On or after today (orientation hasn't happened yet), AND
+        //   2. Not past their registration deadline (if one was set).
+        // Dates are stored as "YYYY-MM-DD" strings so string comparison
         // works correctly — lexicographic order matches chronological order.
-        const today = new Date().toISOString().split('T')[0]; // e.g. "2026-05-26"
-        const upcomingEvents = events.filter(e => e.date >= today);
+        const today = new Date().toISOString().split('T')[0]; // e.g. "2026-06-08"
+        const upcomingEvents = events.filter(e => {
+          // If a deadline was set and it's already passed, hide the event.
+          if (e.registrationDeadline && e.registrationDeadline < today) return false;
+          // Otherwise only show events on or after today.
+          return e.date >= today;
+        });
 
         this.calendarEvents = upcomingEvents.map((e) => ({
           id: e._id,
