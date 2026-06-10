@@ -83,7 +83,7 @@
       @if (selectedEvent.extendedProps?.['description']) {
         <div class="modal-description">
           <span class="modal-label">About This Event</span>
-          <p>{{ selectedEvent.extendedProps?.['description'] }}</p>
+          <p [innerHTML]="formatDescription(selectedEvent.extendedProps?.['description'])"></p>
         </div>
       }
 

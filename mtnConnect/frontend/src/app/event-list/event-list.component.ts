@@ -154,6 +154,18 @@ export class EventListComponent implements OnInit {
     return event.id;
   }
 
+  // Converts plain-text description into safe HTML, turning newlines into <br>
+  // tags so paragraph breaks entered in the admin form show up in the popup.
+  // We escape &, <, > first so the text can't accidentally inject HTML.
+  formatDescription(text: string | undefined): string {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+  }
+
   // Converts "HH:MM" (24-hour) from the admin form into "H:MM AM/PM" for display.
   // Returns null if no time was set so the template can show a fallback.
   formatTime(raw: string | undefined): string | null {
