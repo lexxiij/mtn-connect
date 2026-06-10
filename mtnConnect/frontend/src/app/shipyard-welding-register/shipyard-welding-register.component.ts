@@ -55,6 +55,13 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
   // Set to true if today is past the admin-set registrationDeadline.
   registrationClosed = false;
 
+  // ── Dynamic event info ─────────────────────────────────────────────────────
+  // Pulled from the matching event in the database so the page always
+  // reflects whatever the admin has set — no code change needed next cohort.
+  orientationDate    = '';   // "YYYY-MM-DD" — formatted in the template with the date pipe
+  orientationTime    = '';   // "HH:MM" start time
+  orientationEndTime = '';   // "HH:MM" end time
+
   // ── Static data ────────────────────────────────────────────────────────────
   // readonly = this array never changes at runtime, which is good practice.
   readonly shifts: ShiftOption[] = [
@@ -93,9 +100,16 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
         // if all dates have passed (so the deadline still applies).
         const target = swEvents.find(e => e.date >= today) ?? swEvents[swEvents.length - 1];
 
-        if (target?.registrationDeadline) {
-          // today > deadline  →  closed  (string comparison works for YYYY-MM-DD)
-          this.registrationClosed = today > target.registrationDeadline;
+        if (target) {
+          // Save date/time so the template can display them dynamically.
+          this.orientationDate    = target.date      || '';
+          this.orientationTime    = target.time      || '';
+          this.orientationEndTime = target.endTime   || '';
+
+          if (target.registrationDeadline) {
+            // today > deadline  →  closed  (string comparison works for YYYY-MM-DD)
+            this.registrationClosed = today > target.registrationDeadline;
+          }
         }
 
         this.checkingDeadline = false;
@@ -130,6 +144,17 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
     if (this.shift3 === this.shift1 || this.shift3 === this.shift2) {
       this.shift3 = '';
     }
+  }
+
+  // ── formatTime(raw) ───────────────────────────────────────────────────────
+  // Converts "HH:MM" (24-hour) to "H:MM AM/PM" for display.
+  // Returns null if no time is set.
+  formatTime(raw: string): string | null {
+    if (!raw) return null;
+    const [h, m] = raw.split(':').map(Number);
+    const period = h >= 12 ? 'PM' : 'AM';
+    const hour   = h % 12 || 12;
+    return `${hour}:${String(m).padStart(2, '0')} ${period}`;
   }
 
   // ── shiftLabel(value) ─────────────────────────────────────────────────────
