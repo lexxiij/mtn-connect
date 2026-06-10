@@ -234,8 +234,11 @@
       <div class="success-icon">✓</div>
       <h2>You're Registered!</h2>
       <p>
-        Thank you for registering for the Shipyard Welding Orientation! We will be in touch
-        soon with further details regarding your enrollment.
+        Thank you for registering for the Shipyard Welding Orientation!
+        We look forward to seeing you at orientation
+        @if (orientationDate) {
+          on <strong>{{ orientationDate | date:'EEEE, MMMM d, y' : 'UTC' }}</strong>
+        }.
       </p>
       <button class="btn-primary" (click)="success = false" routerLink="/">
         Return to Home

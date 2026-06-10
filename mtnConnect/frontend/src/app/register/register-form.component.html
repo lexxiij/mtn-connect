@@ -112,9 +112,11 @@
       <div class="modal-icon">✓</div>
       <h3>Registration Submitted!</h3>
       <p>
-        Thank you for submitting a registration form for the
-        <strong>{{ submittedType }}</strong> orientation.
-        Someone will be in contact with you soon by email or phone with more information.
+        Thank you for registering for the <strong>{{ submittedType }}</strong> orientation.
+        We look forward to seeing you at orientation
+        @if (submittedDate) {
+          on <strong>{{ submittedDate | date:'EEEE, MMMM d, y' : 'UTC' }}</strong>
+        }.
       </p>
       <button class="modal-btn" (click)="success = false">Close</button>
     </div>

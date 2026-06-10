@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminAttendeesService } from '../services/admin-attendees.service';
+import { EventsService, TrainingEvent } from '../services/events.service';
 
 @Component({
   selector: 'app-register-form',
@@ -11,7 +12,7 @@ import { AdminAttendeesService } from '../services/admin-attendees.service';
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.css'],
 })
-export class RegistrationFormComponent {
+export class RegistrationFormComponent implements OnInit {
   fullName     = '';
   email        = '';
   phone        = '';
@@ -28,7 +29,12 @@ export class RegistrationFormComponent {
   loading          = false;
   errorMsg         = '';
   submittedType    = '';
+  submittedDate    = '';   // orientation date for the success modal
   addressError     = '';
+
+  // Map of trainingType (lowercase) → event date "YYYY-MM-DD"
+  // Populated on load so the success modal can show the right date.
+  private eventDateMap: { [type: string]: string } = {};
 
   public missouriCounties: string[] = [
     'Mississippi', 'Scott', 'New Madrid', 'Pemiscot', 'Butler',
@@ -36,7 +42,30 @@ export class RegistrationFormComponent {
     'Saint Francois', 'Stoddard', 'Saint Genevieve',
   ];
 
-  constructor(private attendeesSvc: AdminAttendeesService) {}
+  constructor(
+    private attendeesSvc: AdminAttendeesService,
+    private eventsService: EventsService,
+  ) {}
+
+  ngOnInit(): void {
+    // Fetch events once so we can look up the orientation date after submit.
+    this.eventsService.getAll().subscribe({
+      next: (events: TrainingEvent[]) => {
+        // Build a quick-lookup map: "cdl" → "2026-05-29", "forklift" → "2026-05-29", etc.
+        // If the same type has multiple events, the soonest upcoming date wins.
+        const today = new Date().toISOString().split('T')[0];
+        for (const e of events) {
+          if (!e.trainingType || !e.date) continue;
+          const key = e.trainingType.toLowerCase();
+          // Keep the nearest upcoming date for each type
+          if (!this.eventDateMap[key] || (e.date >= today && e.date < (this.eventDateMap[key] || '9999'))) {
+            this.eventDateMap[key] = e.date;
+          }
+        }
+      },
+      error: () => { /* silent — date just won't show in modal */ }
+    });
+  }
 
   submit(form: NgForm) {
     this.submitted    = true;
@@ -75,11 +104,13 @@ export class RegistrationFormComponent {
 
     this.attendeesSvc.create(payload).subscribe({
       next: () => {
-        this.loading      = false;
+        this.loading       = false;
         this.submittedType = this.trainingType;
-        this.success      = true;
+        // Look up the orientation date for whichever training type they chose
+        this.submittedDate = this.eventDateMap[this.trainingType.toLowerCase()] || '';
+        this.success       = true;
         form.resetForm();
-        this.submitted    = false;
+        this.submitted     = false;
       },
       error: (err) => {
         this.loading  = false;

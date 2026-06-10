@@ -229,6 +229,7 @@
   margin: 0;
   line-height: 1.6;
   color: var(--text-muted);
+  white-space: pre-wrap;  /* preserves the line breaks you type in the admin form */
 }
 
 /* "Please Bring" section */
