@@ -12,25 +12,35 @@
     }
 
     <label>Date of Birth
-      <input name="dob" type="date" [(ngModel)]="dob" #dobCtrl="ngModel" />
+      <input name="dob" type="date" [(ngModel)]="dob" required #dobCtrl="ngModel" />
     </label>
+    @if ((dobCtrl.touched || submitted) && dobCtrl.errors?.['required']) {
+      <small class="error">Date of birth is required</small>
+    }
 
     <label>Phone
       <input
         name="phone"
         type="text"
         [(ngModel)]="phone"
+        required
         pattern="^[0-9\-\+\s\(\)]*$"
         #phoneCtrl="ngModel"
       />
     </label>
+    @if ((phoneCtrl.touched || submitted) && phoneCtrl.errors?.['required']) {
+      <small class="error">Phone number is required</small>
+    }
     @if (phoneCtrl.errors?.['pattern']) {
       <small class="error">Invalid phone format</small>
     }
 
     <label>Address
-      <input name="address" type="text" [(ngModel)]="address" placeholder="e.g. 123 Main St, Springfield, MO 65801" />
+      <input name="address" type="text" [(ngModel)]="address" required #addressCtrl="ngModel" placeholder="e.g. 123 Main St, Springfield, MO 65801" />
     </label>
+    @if ((addressCtrl.touched || submitted) && addressCtrl.errors?.['required']) {
+      <small class="error">Address is required</small>
+    }
     @if (addressError) {
       <small class="error">{{ addressError }}</small>
     }
