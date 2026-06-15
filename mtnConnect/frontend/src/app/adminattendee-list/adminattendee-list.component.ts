@@ -100,11 +100,11 @@ export class AttendeeListComponent implements OnInit {
   }
 
   // ── CSV Export ──────────────────────────────────────────────────────────────
-  // Groups attendees by trainingType, writes a CSV section for each, and
-  // triggers a file download in the browser — no backend needed.
+  // Groups attendees by trainingType. For Shipyard Welding, attendees are
+  // further split into sub-sections by their 1st-choice shift preference.
   exportCSV(): void {
     const headers = ['Name', 'Email', 'Phone', 'Address', 'Date of Birth', 'County',
-                     'Training Type', 'Heard From', 'Heard Other', 'Comments', 'Registered'];
+                     'Training Type', 'Heard From', 'Heard Other', 'Shift Preferences / Comments', 'Registered'];
 
     // Helper: wrap a value in quotes and escape any internal quotes
     const escape = (val: any): string => {
@@ -112,7 +112,24 @@ export class AttendeeListComponent implements OnInit {
       return `"${str.replace(/"/g, '""')}"`;
     };
 
-    // Group attendees by trainingType
+    // Helper: parse a welding attendee's comments to find their 1st-choice shift.
+    // The comments field looks like:
+    //   "Shift Preferences (Top 3) — 1st (Priority): Shift A – 8:00 AM ..."
+    // Returns e.g. "Shift A" or "Unassigned" if not found.
+    const firstShift = (comments: string): string => {
+      const match = (comments || '').match(/1st \(Priority\): Shift ([A-D])/i);
+      return match ? `Shift ${match[1].toUpperCase()}` : 'Unassigned';
+    };
+
+    // Shift label map so sub-sections show the full shift name
+    const shiftLabels: { [key: string]: string } = {
+      'Shift A': 'Shift A — 8:00 AM to 12:00 PM (Weekday)',
+      'Shift B': 'Shift B — 12:30 PM to 4:30 PM (Weekday)',
+      'Shift C': 'Shift C — 5:00 PM to 9:00 PM (Weekday Evening)',
+      'Shift D': 'Shift D — 8:00 AM to 4:00 PM (Weekend)',
+    };
+
+    // Group all attendees by trainingType
     const groups: { [type: string]: attendee[] } = {};
     for (const a of this.attendees) {
       const key = a.trainingType || 'Uncategorized';
@@ -122,22 +139,43 @@ export class AttendeeListComponent implements OnInit {
 
     const rows: string[] = [];
 
+    // Helper: write one data row
+    const writeRow = (a: attendee) => {
+      const registered = a.createdAt ? new Date(a.createdAt).toLocaleDateString() : '';
+      rows.push([
+        a.name, a.email, a.phone, a.address, a.dob,
+        a.county, a.trainingType, a.heardFrom, a.heardOther,
+        a.comments, registered
+      ].map(escape).join(','));
+    };
+
     for (const [trainingType, members] of Object.entries(groups)) {
-      // Section header — bold label row (capitalised training type)
       rows.push(`"=== ${trainingType} ==="`);
-      rows.push(headers.map(escape).join(','));
 
-      for (const a of members) {
-        const registered = a.createdAt ? new Date(a.createdAt).toLocaleDateString() : '';
-        rows.push([
-          a.name, a.email, a.phone, a.address, a.dob,
-          a.county, a.trainingType, a.heardFrom, a.heardOther,
-          a.comments, registered
-        ].map(escape).join(','));
+      // Shipyard Welding gets broken down further by 1st-choice shift
+      if (trainingType.toLowerCase().includes('shipyard')) {
+        const shiftGroups: { [shift: string]: attendee[] } = {};
+        for (const a of members) {
+          const key = firstShift(a.comments);
+          if (!shiftGroups[key]) shiftGroups[key] = [];
+          shiftGroups[key].push(a);
+        }
+
+        // Sort shift groups so A, B, C, D always appear in order
+        for (const shiftKey of Object.keys(shiftGroups).sort()) {
+          const label = shiftLabels[shiftKey] ?? shiftKey;
+          rows.push(`"  > ${label}"`);
+          rows.push(headers.map(escape).join(','));
+          shiftGroups[shiftKey].forEach(writeRow);
+          rows.push(''); // blank line between shifts
+        }
+
+      } else {
+        // All other training types — one flat list
+        rows.push(headers.map(escape).join(','));
+        members.forEach(writeRow);
+        rows.push('');
       }
-
-      // Blank line between sections
-      rows.push('');
     }
 
     const csvContent = rows.join('\r\n');
