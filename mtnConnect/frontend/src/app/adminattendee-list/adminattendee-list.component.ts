@@ -23,9 +23,6 @@ export class AttendeeListComponent implements OnInit {
   editingId: string | null = null;
   editData: Partial<attendee> = {};
 
-  // Status message shown after running the "flag late alternates" backfill
-  alternateStatusMsg = '';
-
   constructor(
     private svc: AdminAttendeesService,
     private auth: AuthService,
@@ -102,46 +99,27 @@ export class AttendeeListComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  // ── Alternate flag ──────────────────────────────────────────────────────────
-  // Lets an admin manually flip the "alternate" (waitlist) checkbox for a
-  // single attendee — e.g. to override the automatic flag.
-  toggleAlternate(a: attendee): void {
-    const newValue = !a.alternate;
-    this.svc.update(a._id!, { alternate: newValue }).subscribe({
-      next: (updated) => {
-        // Update the local copy so the checkbox reflects the saved state
-        a.alternate = updated.alternate;
-      },
-      error: (err) => {
-        this.errorMsg = err.error?.message || 'Failed to update alternate status.';
-      },
-    });
-  }
-
-  // One-time backfill button: flags existing Shipyard Welding attendees who
-  // registered on/after the cutoff date as alternates. New registrations
-  // after the cutoff are already flagged automatically on the backend, so
-  // this is mainly for anyone who registered before this feature shipped.
-  flagLateAlternates(): void {
-    this.alternateStatusMsg = 'Checking for late Shipyard Welding registrants…';
-
-    this.svc.flagLateAlternates().subscribe({
-      next: (res) => {
-        this.alternateStatusMsg = `Done — flagged ${res.count} attendee(s) as alternates.`;
-        this.loadAttendees(); // refresh the table so checkboxes update
-      },
-      error: (err) => {
-        this.alternateStatusMsg = err.error?.message || 'Failed to flag late alternates.';
-      },
-    });
-  }
-
   // ── CSV Export ──────────────────────────────────────────────────────────────
   // Groups attendees by trainingType. For Shipyard Welding, attendees are
-  // further split into sub-sections by their 1st-choice shift preference.
+  // further split into sub-sections by their 1st-choice shift preference, and
+  // each row is marked Yes/No in the Alternate column based on registration
+  // date — no database field needed, it's calculated fresh every export.
   exportCSV(): void {
     const headers = ['Name', 'Email', 'Phone', 'Address', 'Date of Birth', 'County',
-                     'Training Type', 'Heard From', 'Heard Other', 'Shift Preferences / Comments', 'Registered'];
+                     'Training Type', 'Heard From', 'Heard Other', 'Shift Preferences / Comments',
+                     'Registered', 'Alternate'];
+
+    // Anyone in Shipyard Welding who registered on/after this instant (midnight
+    // UTC, June 8) registered "after the 7th" and is marked an alternate.
+    // Only Shipyard Welding has an alternate/waitlist concept, so every other
+    // training type just gets a blank in this column.
+    const ALTERNATE_CUTOFF = new Date('2026-06-08T00:00:00Z');
+    const isLateAlternate = (a: attendee): string => {
+      const isWelding = (a.trainingType || '').toLowerCase().includes('shipyard');
+      if (!isWelding) return '';
+      if (!a.createdAt) return '';
+      return new Date(a.createdAt) >= ALTERNATE_CUTOFF ? 'Yes' : 'No';
+    };
 
     // Helper: wrap a value in quotes and escape any internal quotes
     const escape = (val: any): string => {
@@ -182,7 +160,7 @@ export class AttendeeListComponent implements OnInit {
       rows.push([
         a.name, a.email, a.phone, a.address, a.dob,
         a.county, a.trainingType, a.heardFrom, a.heardOther,
-        a.comments, registered
+        a.comments, registered, isLateAlternate(a)
       ].map(escape).join(','));
     };
 

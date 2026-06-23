@@ -32,14 +32,4 @@ export class AdminAttendeesService {
   delete(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.url}/${id}`);
   }
-
-  // PUT /api/attendees/flag-late-alternates — one-time backfill that marks
-  // existing Shipyard Welding attendees who registered on/after the cutoff
-  // date as "alternate". Safe to run more than once.
-  flagLateAlternates(): Observable<{ message: string; count: number }> {
-    return this.http.put<{ message: string; count: number }>(
-      `${this.url}/flag-late-alternates`,
-      {}
-    );
-  }
 }

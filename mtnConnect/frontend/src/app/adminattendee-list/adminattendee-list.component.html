@@ -5,17 +5,9 @@
       <a routerLink="/home" class="btn-home">Home</a>
       <a routerLink="/admin-events" class="btn-manage-events">Manage Events</a>
       <button class="btn-export" (click)="exportCSV()">Export CSV</button>
-      <button class="btn-flag-alternates" (click)="flagLateAlternates()">
-        Flag Late Welding Alternates
-      </button>
       <button class="btn-logout" (click)="logout()">Log Out</button>
     </div>
   </div>
-
-  <!-- Status message for the "flag late alternates" backfill -->
-  @if (alternateStatusMsg) {
-    <p class="alternate-status">{{ alternateStatusMsg }}</p>
-  }
 
   <!-- Error banner -->
   @if (errorMsg) {
@@ -47,7 +39,6 @@
             <th>Heard From</th>
             <th>Shift Preferences / Notes</th>
             <th>Registered</th>
-            <th>Alternate</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -66,14 +57,6 @@
                 <td>{{ a.heardFrom }}</td>
                 <td class="comments-cell">{{ a.comments || '—' }}</td>
                 <td>{{ a.createdAt | date:'shortDate' }}</td>
-                <td class="alternate-cell">
-                  <input
-                    type="checkbox"
-                    [checked]="a.alternate"
-                    (change)="toggleAlternate(a)"
-                    title="Check to mark this attendee as an alternate / waitlisted"
-                  />
-                </td>
                 <td>
                   <button class="btn-edit" (click)="startEdit(a)">Edit</button>
                   <button class="btn-delete" (click)="deleteAttendee(a)">Delete</button>
@@ -91,7 +74,6 @@
                 <td><input [(ngModel)]="editData.county"       [name]="'edit_county_' + a._id" /></td>
                 <td><input [(ngModel)]="editData.trainingType" [name]="'edit_type_' + a._id"  /></td>
                 <td><input [(ngModel)]="editData.heardFrom"    [name]="'edit_heard_' + a._id" /></td>
-                <td>—</td>
                 <td>—</td>
                 <td>
                   <button class="btn-save" (click)="saveEdit()">Save</button>
