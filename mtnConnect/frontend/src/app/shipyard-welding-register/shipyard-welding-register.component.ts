@@ -25,7 +25,8 @@ interface ShiftOption {
 export class ShipyardWeldingRegisterComponent implements OnInit {
 
   // ── Standard fields ────────────────────────────────────────────────────────
-  fullName   = '';
+  firstName  = '';
+  lastName   = '';
   email      = '';
   phone      = '';
   address    = '';
@@ -214,7 +215,8 @@ export class ShipyardWeldingRegisterComponent implements OnInit {
       : shiftSummary;
 
     const payload = {
-      name:         this.fullName,
+      // Backend only stores a single "name" field, so join the two here.
+      name:         `${this.firstName.trim()} ${this.lastName.trim()}`.trim(),
       email:        this.email,
       phone:        this.phone,
       address:      this.address,

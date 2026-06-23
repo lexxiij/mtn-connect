@@ -13,4 +13,5 @@ export interface attendee {
   comments: string;
   eventId?: string;
   createdAt?: Date;
+  alternate?: boolean;
 }

@@ -18,6 +18,7 @@ const attendeeSchema = new mongoose.Schema(
     heardOther:   { type: String, default: '' },
     comments:     { type: String, default: '' },
     eventId:      { type: String, default: '' },    // links to an Event document later
+    alternate:    { type: Boolean, default: false }, // true = on the waitlist/alternate list
   },
   {
     // timestamps: true automatically adds createdAt and updatedAt fields

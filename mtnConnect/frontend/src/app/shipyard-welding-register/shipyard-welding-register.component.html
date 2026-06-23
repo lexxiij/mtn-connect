@@ -73,11 +73,18 @@
   <!-- Registration Form -->
   <form #form="ngForm" (ngSubmit)="submit(form)">
 
-    <label>Name
-      <input name="name" [(ngModel)]="fullName" required #nameCtrl="ngModel" />
+    <label>First Name
+      <input name="firstName" [(ngModel)]="firstName" required #firstNameCtrl="ngModel" />
     </label>
-    @if ((nameCtrl.touched || submitted) && nameCtrl.errors?.['required']) {
-      <small class="error">Name is required</small>
+    @if ((firstNameCtrl.touched || submitted) && firstNameCtrl.errors?.['required']) {
+      <small class="error">First name is required</small>
+    }
+
+    <label>Last Name
+      <input name="lastName" [(ngModel)]="lastName" required #lastNameCtrl="ngModel" />
+    </label>
+    @if ((lastNameCtrl.touched || submitted) && lastNameCtrl.errors?.['required']) {
+      <small class="error">Last name is required</small>
     }
 
     <label>Date of Birth

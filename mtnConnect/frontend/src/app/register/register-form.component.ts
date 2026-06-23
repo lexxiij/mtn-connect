@@ -13,7 +13,8 @@ import { EventsService, TrainingEvent } from '../services/events.service';
   styleUrls: ['./register-form.component.css'],
 })
 export class RegistrationFormComponent implements OnInit {
-  fullName     = '';
+  firstName    = '';
+  lastName     = '';
   email        = '';
   phone        = '';
   address      = '';
@@ -51,14 +52,19 @@ export class RegistrationFormComponent implements OnInit {
     // Fetch events once so we can look up the orientation date after submit.
     this.eventsService.getAll().subscribe({
       next: (events: TrainingEvent[]) => {
-        // Build a quick-lookup map: "cdl" → "2026-05-29", "forklift" → "2026-05-29", etc.
-        // If the same type has multiple events, the soonest upcoming date wins.
+        // Build a quick-lookup map: "cdl" → "2026-07-15", "forklift" → "2026-08-01", etc.
+        // If the same type has multiple events, the soonest UPCOMING date wins.
         const today = new Date().toISOString().split('T')[0];
         for (const e of events) {
           if (!e.trainingType || !e.date) continue;
+          // Skip events that have already happened — only upcoming dates
+          // should ever end up in the map. (Previously a past event could
+          // get stored first and then never get replaced by a real upcoming
+          // date, which is why CDL was stuck showing a date that had passed.)
+          if (e.date < today) continue;
+
           const key = e.trainingType.toLowerCase();
-          // Keep the nearest upcoming date for each type
-          if (!this.eventDateMap[key] || (e.date >= today && e.date < (this.eventDateMap[key] || '9999'))) {
+          if (!this.eventDateMap[key] || e.date < this.eventDateMap[key]) {
             this.eventDateMap[key] = e.date;
           }
         }
@@ -89,7 +95,8 @@ export class RegistrationFormComponent implements OnInit {
     this.loading = true;
 
     const payload = {
-      name:         this.fullName,
+      // Backend only stores a single "name" field, so join the two here.
+      name:         `${this.firstName.trim()} ${this.lastName.trim()}`.trim(),
       email:        this.email,
       phone:        this.phone,
       address:      this.address,

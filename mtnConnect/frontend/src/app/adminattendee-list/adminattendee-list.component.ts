@@ -23,6 +23,9 @@ export class AttendeeListComponent implements OnInit {
   editingId: string | null = null;
   editData: Partial<attendee> = {};
 
+  // Status message shown after running the "flag late alternates" backfill
+  alternateStatusMsg = '';
+
   constructor(
     private svc: AdminAttendeesService,
     private auth: AuthService,
@@ -97,6 +100,40 @@ export class AttendeeListComponent implements OnInit {
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  // ── Alternate flag ──────────────────────────────────────────────────────────
+  // Lets an admin manually flip the "alternate" (waitlist) checkbox for a
+  // single attendee — e.g. to override the automatic flag.
+  toggleAlternate(a: attendee): void {
+    const newValue = !a.alternate;
+    this.svc.update(a._id!, { alternate: newValue }).subscribe({
+      next: (updated) => {
+        // Update the local copy so the checkbox reflects the saved state
+        a.alternate = updated.alternate;
+      },
+      error: (err) => {
+        this.errorMsg = err.error?.message || 'Failed to update alternate status.';
+      },
+    });
+  }
+
+  // One-time backfill button: flags existing Shipyard Welding attendees who
+  // registered on/after the cutoff date as alternates. New registrations
+  // after the cutoff are already flagged automatically on the backend, so
+  // this is mainly for anyone who registered before this feature shipped.
+  flagLateAlternates(): void {
+    this.alternateStatusMsg = 'Checking for late Shipyard Welding registrants…';
+
+    this.svc.flagLateAlternates().subscribe({
+      next: (res) => {
+        this.alternateStatusMsg = `Done — flagged ${res.count} attendee(s) as alternates.`;
+        this.loadAttendees(); // refresh the table so checkboxes update
+      },
+      error: (err) => {
+        this.alternateStatusMsg = err.error?.message || 'Failed to flag late alternates.';
+      },
+    });
   }
 
   // ── CSV Export ──────────────────────────────────────────────────────────────

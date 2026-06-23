@@ -48,6 +48,17 @@ router.post('/', async (req, res) => {
     // always compare apples to apples.
     if (incomingPhone) req.body.phone = incomingPhone;
 
+    // Auto-flag Shipyard Welding sign-ups submitted after the cutoff date
+    // as "Alternate" — they registered too late for a guaranteed spot.
+    const ALTERNATE_CUTOFF = '2026-06-07'; // last day to register for a confirmed spot
+    const trainingTypeLower = (req.body.trainingType || '').toLowerCase();
+    if (trainingTypeLower.includes('shipyard')) {
+      const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+      if (today > ALTERNATE_CUTOFF) {
+        req.body.alternate = true;
+      }
+    }
+
     // req.body contains the JSON sent from the Angular form
     const attendee = new Attendee(req.body);
 
@@ -83,6 +94,43 @@ router.get('/:id', requireAuth, async (req, res) => {
     if (!attendee) return res.status(404).json({ message: 'Attendee not found.' });
     res.json(attendee);
   } catch (err) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// ── PUT /api/attendees/flag-late-alternates (admin only) ─────────────────────
+// One-time backfill: marks existing Shipyard Welding attendees who registered
+// on/after the cutoff date as "alternate". Safe to run more than once — it
+// only ever sets alternate to true, never unsets it.
+//
+// ⚠️ IMPORTANT: this route MUST be declared BEFORE `router.put('/:id', ...)`.
+// Express matches routes top-to-bottom, and "/:id" would otherwise swallow
+// "/flag-late-alternates" as if "flag-late-alternates" were an :id value,
+// causing a Mongoose "Cast to ObjectId failed" error.
+router.put('/flag-late-alternates', requireAuth, async (req, res) => {
+  try {
+    // Midnight UTC on June 8 — anyone registered AT OR AFTER this instant
+    // registered sometime on the 8th or later, i.e. strictly "after the 7th".
+    // (Using "after June 7" directly would also need >, which is awkward to
+    // express with Date objects, so we shift the cutoff forward one day and
+    // use >= instead — same result, easier to read.)
+    const ALTERNATE_CUTOFF = new Date('2026-06-08T00:00:00Z');
+
+    const result = await Attendee.updateMany(
+      {
+        trainingType: { $regex: /shipyard/i },
+        createdAt: { $gte: ALTERNATE_CUTOFF },
+        alternate: { $ne: true },
+      },
+      { $set: { alternate: true } }
+    );
+
+    res.json({
+      message: 'Late Shipyard Welding registrants flagged as alternates.',
+      count: result.modifiedCount,
+    });
+  } catch (err) {
+    console.error('Error flagging late alternates:', err);
     res.status(500).json({ message: 'Server error.' });
   }
 });
