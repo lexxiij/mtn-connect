@@ -1,6 +1,9 @@
 <button class="btn-primary" routerLink="/">Back to Dashboard</button>
 <div class="form-container">
   <h2>Training Registration</h2>
+  <p class="interest-link">
+    Not ready to pick a date? <a routerLink="/interest">Join the interest list</a> and we'll contact you.
+  </p>
 
   <form #form="ngForm" (ngSubmit)="submit(form)">
 

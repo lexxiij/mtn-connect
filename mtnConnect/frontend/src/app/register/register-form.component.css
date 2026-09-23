@@ -183,3 +183,14 @@ button[type="submit"]:active {
     padding: 28px 20px;
   }
 }
+
+/* Link to the interest form, shown under the heading */
+.interest-link {
+  margin: -16px 0 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.interest-link a {
+  color: var(--primary);
+  font-weight: 600;
+}

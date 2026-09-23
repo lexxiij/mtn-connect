@@ -1,0 +1,81 @@
+/* Extra styles for the interest form.
+   Base form styles come from ../register/register-form.component.css */
+
+.intro {
+  margin: -12px 0 24px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* First + last name side by side on wider screens */
+.name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Class picker: big tappable radio "cards" (easy on a phone) ── */
+.class-picker {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.class-picker legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* Override the column layout that `label` gets from the shared CSS */
+.class-option {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.class-option input {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  accent-color: var(--primary);
+}
+
+.class-option.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.alt-link {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.alt-link a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .name-row {
+    grid-template-columns: 1fr;
+  }
+}

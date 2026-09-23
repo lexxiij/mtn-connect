@@ -10,6 +10,8 @@ import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { ShipyardWeldingRegisterComponent } from './shipyard-welding-register/shipyard-welding-register.component';
+import { InterestFormComponent } from './interest-form/interest-form.component';
+import { AdminInterestsComponent } from './admin-interests/admin-interests.component';
 
 export const routes: Routes = [
   { path: '',                 component: HomeComponent, pathMatch: 'full' },
@@ -17,10 +19,12 @@ export const routes: Routes = [
   { path: 'events',           component: EventListComponent },
   { path: 'register',         component: RegistrationFormComponent },
   { path: 'shipyard-welding', component: ShipyardWeldingRegisterComponent },
+  { path: 'interest',         component: InterestFormComponent },   // job-fair interest list
   { path: 'contact',          component: ContactComponent },
   { path: 'login',            component: LoginComponent },
 
   // admin only
   { path: 'attendees',    component: AttendeeListComponent,  canActivate: [authGuard] },
   { path: 'admin-events', component: AdminEventsComponent,   canActivate: [authGuard] },
+  { path: 'interests',    component: AdminInterestsComponent, canActivate: [authGuard] },
 ];

@@ -1,0 +1,138 @@
+<!-- INTEREST FORM — public page at /interest (built for job fairs) -->
+<div class="form-container">
+  <h2>Training Interest Form</h2>
+  <p class="intro">
+    Tell us which class you're interested in and we'll reach out with dates and next steps.
+    <strong>Classes are tentative for November 2026.</strong>
+  </p>
+
+  <form #form="ngForm" (ngSubmit)="submit(form)" novalidate>
+
+    <!-- ── Which class? (radio buttons = choose exactly one) ── -->
+    <fieldset class="class-picker">
+      <legend>Which class are you interested in?</legend>
+      @for (c of classes; track c) {
+        <label class="class-option" [class.selected]="trainingType === c">
+          <input type="radio" name="trainingType" [value]="c"
+                 [(ngModel)]="trainingType" required #typeCtrl="ngModel" />
+          <span>{{ c }}</span>
+        </label>
+      }
+    </fieldset>
+    @if (submitted && !trainingType) {
+      <small class="error">Please choose a class</small>
+    }
+
+    <!-- ── About you ── -->
+    <div class="name-row">
+      <label>First Name
+        <input name="firstName" [(ngModel)]="firstName" required autocomplete="given-name" #firstNameCtrl="ngModel" />
+        @if ((firstNameCtrl.touched || submitted) && firstNameCtrl.errors?.['required']) {
+          <small class="error">First name is required</small>
+        }
+      </label>
+
+      <label>Last Name
+        <input name="lastName" [(ngModel)]="lastName" required autocomplete="family-name" #lastNameCtrl="ngModel" />
+        @if ((lastNameCtrl.touched || submitted) && lastNameCtrl.errors?.['required']) {
+          <small class="error">Last name is required</small>
+        }
+      </label>
+    </div>
+
+    <label>Phone
+      <input name="phone" type="tel" inputmode="tel" autocomplete="tel"
+             [(ngModel)]="phone" required pattern="^[0-9\-\+\s\(\)]{10,}$" #phoneCtrl="ngModel" />
+    </label>
+    @if ((phoneCtrl.touched || submitted) && phoneCtrl.errors?.['required']) {
+      <small class="error">Phone number is required</small>
+    }
+    @if ((phoneCtrl.touched || submitted) && phoneCtrl.errors?.['pattern']) {
+      <small class="error">Please enter a 10-digit phone number</small>
+    }
+
+    <label>Email
+      <input name="email" type="email" inputmode="email" autocomplete="email"
+             [(ngModel)]="email" required email #emailCtrl="ngModel" />
+    </label>
+    @if ((emailCtrl.touched || submitted) && emailCtrl.errors?.['required']) {
+      <small class="error">Email is required</small>
+    }
+    @if ((emailCtrl.touched || submitted) && emailCtrl.errors?.['email']) {
+      <small class="error">Please enter a valid email</small>
+    }
+
+    <label>Address
+      <input name="address" autocomplete="street-address" [(ngModel)]="address" required
+             #addressCtrl="ngModel" placeholder="e.g. 123 Main St, Charleston, MO 63834" />
+    </label>
+    @if ((addressCtrl.touched || submitted) && addressCtrl.errors?.['required']) {
+      <small class="error">Address is required</small>
+    }
+    @if (addressError) {
+      <small class="error">{{ addressError }}</small>
+    }
+
+    <label>County of Residence
+      <select name="county" [(ngModel)]="county" required #countyCtrl="ngModel">
+        <option value="">Select a county...</option>
+        @for (c of counties; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </label>
+    @if ((countyCtrl.touched || submitted) && countyCtrl.errors?.['required']) {
+      <small class="error">Please select a county</small>
+    }
+
+    <label>Date of Birth <span class="optional">(optional)</span>
+      <input name="dob" type="date" [(ngModel)]="dob" />
+    </label>
+
+    <label>Highest Education Completed
+      <select name="education" [(ngModel)]="education" required #educationCtrl="ngModel">
+        <option value="">Select one...</option>
+        @for (e of educationLevels; track e) {
+          <option [value]="e">{{ e }}</option>
+        }
+      </select>
+    </label>
+    @if ((educationCtrl.touched || submitted) && educationCtrl.errors?.['required']) {
+      <small class="error">Please select your highest education</small>
+    }
+
+    <label>Anything else we should know? <span class="optional">(optional)</span>
+      <textarea name="comments" [(ngModel)]="comments" rows="3"
+                placeholder="Questions, best time to call, work experience..."></textarea>
+    </label>
+
+    @if (errorMsg) {
+      <p class="error">{{ errorMsg }}</p>
+    }
+    @if (submitted && form.invalid) {
+      <p class="error">Please complete all required fields.</p>
+    }
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Submitting...' : "I'm Interested" }}
+    </button>
+  </form>
+
+  <p class="alt-link">
+    Already know your class date? <a routerLink="/register">Register for orientation instead</a>
+  </p>
+</div>
+
+@if (success) {
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon">✓</div>
+      <h3>Thanks for your interest!</h3>
+      <p>
+        We've added you to the interest list for <strong>{{ submittedType }}</strong>.
+        A Meet The Need team member will contact you with upcoming class dates.
+      </p>
+      <button class="modal-btn" (click)="success = false">Done</button>
+    </div>
+  </div>
+}

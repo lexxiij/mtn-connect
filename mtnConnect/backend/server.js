@@ -11,6 +11,7 @@ const attendeesRouter       = require('./routes/attendees');
 const eventsRouter          = require('./routes/events');
 const { router: authRouter, setAdminHash } = require('./routes/auth');
 const donationsRouter       = require('./routes/donations');
+const interestsRouter       = require('./routes/interests');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -50,6 +51,7 @@ app.use('/api/attendees', attendeesRouter);
 app.use('/api/events',    eventsRouter);
 app.use('/api/auth',      authRouter);
 app.use('/api/donations', donationsRouter);
+app.use('/api/interests', interestsRouter);
 
 // Health check — useful for deployment platforms to verify the server is alive
 app.get('/api/health', (req, res) => {

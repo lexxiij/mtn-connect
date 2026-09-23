@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="admin-header">
+    <h2>Admin — Interest List</h2>
+    <div class="header-actions">
+      <a routerLink="/home" class="btn-home">Home</a>
+      <a routerLink="/attendees" class="btn-home">View Attendees</a>
+      <button class="btn-export" (click)="exportCSV()" [disabled]="interests.length === 0">Export CSV</button>
+      <button class="btn-logout" (click)="logout()">Log Out</button>
+    </div>
+  </div>
+
+  @if (errorMsg) { <p class="error">{{ errorMsg }}</p> }
+  @if (loading)  { <p>Loading sign-ups...</p> }
+  @if (!loading && interests.length === 0 && !errorMsg) { <p>No interest sign-ups yet.</p> }
+
+  @if (!loading && interests.length > 0) {
+    <p>
+      <strong>{{ interests.length }}</strong> total —
+      @for (c of countsByClass; track c.name; let last = $last) {
+        {{ c.name }}: <strong>{{ c.count }}</strong>@if (!last) {, }
+      }
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Class</th><th>Phone</th><th>Email</th><th>Address</th>
+            <th>County</th><th>Education</th><th>Comments</th><th>Source</th>
+            <th>Signed Up</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of interests; track i._id) {
+            <tr>
+              <td>{{ i.name }}</td>
+              <td>{{ i.trainingType }}</td>
+              <td>{{ i.phone }}</td>
+              <td>{{ i.email }}</td>
+              <td>{{ i.address }}</td>
+              <td>{{ i.county }}</td>
+              <td>{{ i.education || '—' }}</td>
+              <td class="comments-cell">{{ i.comments || '—' }}</td>
+              <td>{{ i.source || '—' }}</td>
+              <td>{{ i.createdAt | date:'shortDate' }}</td>
+              <td><button class="btn-delete" (click)="remove(i)">Delete</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
