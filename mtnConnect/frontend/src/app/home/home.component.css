@@ -88,6 +88,17 @@
   color: #fff;
 }
 
+/* Interest button: same outline style, but in the brand orange so it
+   stands out next to the teal "Get In Touch" button */
+.btn-interest {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-interest:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
 /* ── Cards Section ─────────────────────────────────────────── */
 .cards-section {
   padding: 60px 24px 80px;
@@ -134,6 +145,7 @@
 .card-events    { border-top-color: var(--primary); }
 .card-contact   { border-top-color: var(--success); }
 .card-attendees { border-top-color: var(--accent); }
+.card-interest  { border-top-color: var(--accent); }
 
 /* Icon circle above the card title */
 .card-icon {
